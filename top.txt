@@ -1,0 +1,32 @@
+width 435
+height 160
+
+fontSize 22
+fontOutSize 2
+
+fontShadowColor #0e1217
+fontShadowBlur 5
+fontShadowX 2
+fontShadowY 2
+
+fontOutColor #000000
+fontColor #ffffff
+
+xOffsetRight 6
+xOffsetLeft 6
+#bgColor red
+
+font /system/fonts/DroidSans-Bold.ttf
+
+vSpace 0
+color1 #00FFEC
+
+topTime 1
+
+TEXT
+${fontColor color1}${fontSize 23}Top ram process:${hline} ${fontColor} ${fontSize}
+${top name 0} ${top cpu 0}
+${top name 1} ${top cpu 1}
+${top name 2} ${top cpu 2}
+${top name 3} ${top cpu 3}
+${top name 4} ${top cpu 4}

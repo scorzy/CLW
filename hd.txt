@@ -1,0 +1,37 @@
+width 900
+height 700
+
+fontSize 35
+fontOutSize 7
+
+fontShadowColor black
+fontShadowBlur 6
+fontShadowX 3
+fontShadowY 3
+
+fontOutColor #000000
+fontColor #ffffff
+
+xOffsetRight 5
+xOffsetLeft 5
+bgColor #888888
+#font /system/fonts/RobotoCondensed-Light.ttf
+vSpace 8
+lineWidth 3
+topTime 2
+
+TEXT
+Date: ${date %H:%M:%S}
+Uptime: ${uptime}${alignr}kernel ${kernel}
+${fontColor #059e00}${fontSize 38}BATTERY${hline} ${fontColor} ${fontSize}
+${battery_charging} ${battery_percent}% ${battery_bar}
+${fontColor #059e00}${fontSize 38}RAM${hline} ${fontColor} ${fontSize}
+${mem_used }/${mem_total} ${mem_percent}% ${mem_bar}
+${fontColor #059e00}${fontSize 38}STORAGE${hline} ${fontColor} ${fontSize}
+${fs_used /sdcard}/${fs_size /sdcard} ${fs_perc /sdcard}% ${fs_bar /sdcard}
+${fontColor #059e00}${fontSize 38}Top cpu process:${hline} ${fontColor} ${fontSize}
+${top name 0} ${top cpu 0}
+${top name 1} ${top cpu 1}
+${top name 2} ${top cpu 2}
+${top name 3} ${top cpu 3}
+${top name 4} ${top cpu 4}

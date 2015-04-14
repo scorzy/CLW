@@ -1,0 +1,44 @@
+width 435
+height 430
+
+fontSize 20
+fontOutSize 5
+
+fontShadowColor #70000000
+fontShadowBlur 8
+fontShadowX 2
+fontShadowY 2
+
+fontOutColor #000000
+fontColor #ffffff
+
+xOffsetRight 6
+xOffsetLeft 6
+#bgColor red
+
+#font /system/fonts/DroidSans-Bold.ttf
+
+vSpace 0
+color1 #00B800
+
+future 60
+calendars_ids 1 2 13
+
+TEXT
+uptime: ${uptime} kernel ${kernel}
+${fontColor color1}${fontSize 20}BATTERY${hline} ${fontColor} ${fontSize}
+${battery_charging} ${battery_percent}% ${battery_bar}
+${fontColor color1}${fontSize 20}RAM${hline} ${fontColor} ${fontSize}
+${mem_used }/${mem_total} ${mem_percent}% ${mem_bar}
+${fontColor color1}${fontSize 20}STORAGE${hline} ${fontColor} ${fontSize}
+int: ${fs_used}/${fs_size} ${fs_perc}% ${fs_bar}
+sd: ${fs_used /storage/sdcard1}/${fs_size /storage/sdcard1} ${fs_perc /storage/sdcard1}% ${fs_bar /storage/sdcard1}
+${fontColor color1}${fontSize 20}WIFI${hline} ${fontColor} ${fontSize}
+${ssid} ${wifi_ip}
+${fontColor color1}${fontSize 20}AGENDA${hline} ${fontColor} ${fontSize}
+${agenda dt_start_custom 0 d MMM E}${agenda dt_start_hm 0}-${agenda dt_end_hm 0} ${agenda title 0}
+${agenda dt_start_custom 1 d MMM E}${agenda dt_start_hm 1}-${agenda dt_end_hm 1} ${agenda title 1}
+${agenda dt_start_custom 2 d MMM E}${agenda dt_start_hm 2}-${agenda dt_end_hm 2} ${agenda title 2}
+${agenda dt_start_custom 3 d MMM E}${agenda dt_start_hm 3}-${agenda dt_end_hm 3} ${agenda title 3}
+${agenda dt_start_custom 4 d MMM E}${agenda dt_start_hm 4}-${agenda dt_end_hm 4} ${agenda title 4}
+${agenda dt_start_custom 5 d MMM E}${agenda dt_start_hm 5}-${agenda dt_end_hm 5} ${agenda title 5}

@@ -1,0 +1,33 @@
+width 440
+height 260
+
+fontSize 21
+fontOutSize 2
+
+#fontShadowColor black
+fontShadowBlur 2
+fontShadowX 0
+fontShadowY 0
+
+fontOutColor #000000
+fontColor #ffffff
+
+xOffsetRight 2
+xOffsetLeft 2
+#bgColor red
+
+#font /system/fonts/DroidSans-Bold.ttf
+
+#vSpace -1
+color1 #00B800
+
+TEXT
+uptime: ${uptime} kernel ${kernel}
+${color1}${fontSize 22}BATTERY${hline} ${fontColor} ${fontSize}
+${battery_charging} ${battery_percent}% ${battery_bar}
+${color1}${fontSize 22}RAM${hline} ${fontColor} ${fontSize}
+${mem_used }/${mem_total} ${mem_percent}% ${mem_bar}
+${color1}${fontSize 22}STORAGE${hline} ${fontColor} ${fontSize}
+int: ${fs_used}/${fs_size} ${fs_perc}% ${fs_bar}
+${color1}${fontSize 22}WIFI${hline} ${fontColor} ${fontSize}
+${ssid} ${wifi_ip}

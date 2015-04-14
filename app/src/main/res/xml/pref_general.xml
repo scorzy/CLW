@@ -1,0 +1,28 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <CheckBoxPreference
+        android:key="@string/alarm_key"
+        android:title="@string/use_alarm"
+        android:summary="@string/use_alarm"
+        android:defaultValue="false"/>
+
+    <!-- NOTE: EditTextPreference accepts EditText attributes. -->
+    <!-- NOTE: EditTextPreference's summary should be set to its value by the activity code. -->
+    <EditTextPreference
+        android:key="@string/update_intervall_key"
+        android:title="@string/update_intervall"
+        android:defaultValue="@string/pref_default_update_intervall"
+        android:selectAllOnFocus="true"
+        android:inputType="number"
+        android:singleLine="true"
+        android:maxLines="1"/>
+
+    <CheckBoxPreference
+        android:key="@string/use_notification_key"
+        android:title="@string/use_notification"
+        android:summary="@string/use_notification"
+        android:defaultValue="false"/>
+
+    <Preference android:title="Click to show calendars ids" android:key="idsbutton"/>
+
+</PreferenceScreen>

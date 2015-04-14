@@ -1,0 +1,11 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/action_parent"
+        android:icon="@drawable/go_up"
+        android:showAsAction="ifRoom"
+        android:title="@string/action_search" />
+    <!-- Settings, should always be in the overflow -->
+
+
+</menu>
