@@ -4,6 +4,7 @@
 /.idea/libraries
 .DS_Store
 /build
+release
 
 ### Android template
 # Built application files

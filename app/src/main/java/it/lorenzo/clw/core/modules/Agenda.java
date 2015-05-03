@@ -82,6 +82,7 @@ public class Agenda extends AbstractMobule {
 	public String getString(String key, String[] params) {
 		if (key.equals(AGENDA)) {
 			if (cursor.moveToPosition(Integer.parseInt(params[1]))) {
+				GregorianCalendar now = new GregorianCalendar();
 				boolean allDay = cursor.getString(5).equals("1");
 				GregorianCalendar start = new GregorianCalendar();
 				start.setTimeInMillis(Long.parseLong(cursor.getString(3)));
@@ -96,39 +97,66 @@ public class Agenda extends AbstractMobule {
 					custom += params[i] + " ";
 				}
 
+				int year = now.get(GregorianCalendar.YEAR);
+				if (start.get(GregorianCalendar.MONTH) < now.get(GregorianCalendar.MONTH) ||
+						((start.get(GregorianCalendar.MONTH) == now.get(GregorianCalendar.MONTH)) &&
+								(start.get(GregorianCalendar.DAY_OF_MONTH) < now.get(GregorianCalendar.DAY_OF_MONTH))))
+					year++;
+				GregorianCalendar startForAllDay = new GregorianCalendar(year, start.get(GregorianCalendar.MONTH), start.get(GregorianCalendar.DAY_OF_MONTH));
+
+				year = now.get(GregorianCalendar.YEAR);
+				if (end.get(GregorianCalendar.MONTH) < now.get(GregorianCalendar.MONTH) ||
+						((end.get(GregorianCalendar.MONTH) == end.get(GregorianCalendar.MONTH)) &&
+								(end.get(GregorianCalendar.DAY_OF_MONTH) < end.get(GregorianCalendar.DAY_OF_MONTH))))
+					year++;
+				GregorianCalendar endForAllDay = new GregorianCalendar(year, end.get(GregorianCalendar.MONTH), end.get(GregorianCalendar.DAY_OF_MONTH));
+
+				GregorianCalendar startToUse;
+				if (allDay)
+					startToUse = startForAllDay;
+				else
+					startToUse = start;
+
+				GregorianCalendar endToUse;
+				if (allDay)
+					endToUse = endForAllDay;
+				else
+					endToUse = end;
+
+
 				switch (params[0]) {
 					case TITLE:
 						return cursor.getString(1);
 					case STARTNUM:
-						return "" + start.get(Calendar.DAY_OF_MONTH);
+						return "" + startToUse.get(Calendar.DAY_OF_MONTH);
 					case ENDNUM:
-						return "" + end.get(Calendar.DAY_OF_MONTH);
+						return "" + endToUse.get(Calendar.DAY_OF_MONTH);
 					case STARTDAYSHORT:
-						return dayShort.format(Long.parseLong(cursor.getString(3)));
+						return dayShort.format(startToUse.getTimeInMillis());
 					case ENDDAYSHORT:
-						return dayShort.format(Long.parseLong(cursor.getString(4)));
+						return dayShort.format(endToUse.getTimeInMillis());
 					case STARTDAYLONG:
-						return dayLong.format(Long.parseLong(cursor.getString(3)));
+						return dayLong.format(startToUse.getTimeInMillis());
 					case ENDDAYLONG:
-						return dayLong.format(Long.parseLong(cursor.getString(4)));
+						return dayLong.format(endToUse.getTimeInMillis());
 					case STARTMOUNT:
-						return "" + start.get(Calendar.MONTH);
+						return "" + startToUse.get(Calendar.MONTH);
 					case ENDMOUNT:
-						return "" + end.get(Calendar.MONTH);
+						return "" + endToUse.get(Calendar.MONTH);
 					case STARTCUSTOM:
 						SimpleDateFormat startCustom = new SimpleDateFormat(custom, current);
-						return startCustom.format(Long.parseLong(cursor.getString(3)));
+						return startCustom.format(startToUse.getTimeInMillis());
 					case ENDCUSTOM:
 						SimpleDateFormat endCustom = new SimpleDateFormat(custom, current);
-						return endCustom.format(Long.parseLong(cursor.getString(4)));
+						return endCustom.format(endToUse.getTimeInMillis());
 					case STARTHH:
-						return "" + start.get(Calendar.HOUR_OF_DAY);
+						return "" + startToUse.get(Calendar.HOUR_OF_DAY);
 					case STARTMM:
-						return "" + start.get(Calendar.MINUTE);
+						return "" + startToUse.get(Calendar.MINUTE);
 					case ENDHH:
-						return "" + end.get(Calendar.HOUR_OF_DAY);
+						return "" + endToUse.get(Calendar.HOUR_OF_DAY);
 					case ENDMM:
-						return "" + end.get(Calendar.MINUTE);
+						return "" + endToUse.get(Calendar.MINUTE);
 					case STARTHM:
 						if (!allDay)
 							return "" + start.get(Calendar.HOUR_OF_DAY) + ":" + start.get(Calendar.MINUTE);
