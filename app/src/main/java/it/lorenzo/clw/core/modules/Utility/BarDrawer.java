@@ -9,6 +9,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.util.Log;
 
 import it.lorenzo.clw.core.modules.TextManager;
 
@@ -28,9 +29,8 @@ public class BarDrawer {
 		Bitmap bmp = Bitmap
 				.createBitmap(width, height, Bitmap.Config.ARGB_8888);
 		Canvas c = new Canvas(bmp);
-		//	c.drawColor(Color.BLUE);
 
-		float strk = fillPaint.getStrokeWidth();
+        float strk = fillPaint.getStrokeWidth();
 
 		float x1 = strk + txtMan.getBoundsMarginX();
 		float x2 = width - txtMan.getBoundsMarginX();
@@ -38,13 +38,13 @@ public class BarDrawer {
 		float y2 = height - descent ;
 
 		fillPaint.setStyle(Paint.Style.FILL);
-		c.drawRect(x1, y1, (x2 * percent) / 100, y2, fillPaint);
+		c.drawRect(x1, y1, x1 + (x2 -x1) * percent / (float) 100, y2, fillPaint);
 		fillPaint.setStyle(Paint.Style.STROKE);
 		c.drawRect(x1, y1, x2, y2, fillPaint);
 
-		fillPaint.setShadowLayer(0,0,0, Color.BLACK);
+		fillPaint.setShadowLayer(0, 0, 0, Color.BLACK);
 		fillPaint.setStyle(Paint.Style.FILL);
-		c.drawRect(x1, y1, (x2 * percent) / 100, y2, fillPaint);
+		c.drawRect(x1, y1, x1 + (x2 -x1) * percent / (float) 100, y2, fillPaint);
 		fillPaint.setStyle(Paint.Style.STROKE);
 		c.drawRect(x1, y1, x2, y2, fillPaint);
 
