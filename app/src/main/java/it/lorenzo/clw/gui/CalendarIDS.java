@@ -6,7 +6,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.CalendarContract.Calendars;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
@@ -55,7 +54,7 @@ public class CalendarIDS extends AppCompatActivity {
             accountName = cur.getString(PROJECTION_ACCOUNT_NAME_INDEX);
             ownerName = cur.getString(PROJECTION_OWNER_ACCOUNT_INDEX);
 
-            Log.i("" + calID, displayName);
+            //Log.i("" + calID, displayName);
             string += calID + " " + displayName + "\n";
         }
         final TextView textView = (TextView) findViewById(R.id.calendarsIds);

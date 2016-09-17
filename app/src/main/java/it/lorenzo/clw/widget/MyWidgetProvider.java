@@ -15,7 +15,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
-import android.util.Log;
 import android.widget.RemoteViews;
 
 import it.lorenzo.clw.R;
@@ -173,7 +172,7 @@ public class MyWidgetProvider extends AppWidgetProvider {
         } else if (AppWidgetManager.ACTION_APPWIDGET_UPDATE.equals(act)
                 || act.equals("it.lorenzo.clw.intent.action.ALARM")) {
 
-            Log.i("alarm", "asd");
+            //Log.i("alarm", "asd");
             AppWidgetManager man = AppWidgetManager.getInstance(context);
             int[] ids = man.getAppWidgetIds(
                     new ComponentName(context, MyWidgetProvider.class));
