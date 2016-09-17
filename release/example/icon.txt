@@ -1,0 +1,26 @@
+width 500
+height 500
+
+fontSize 200
+fontOutSize 8
+
+fontShadowColor #00000000
+#fontShadowColor #F5C600
+fontShadowBlur 0
+fontShadowX 0
+fontShadowY 0
+
+fontOutColor #C0000000
+fontColor #33cc33
+
+xOffsetRight 0
+
+bgColor white
+
+#font /system/fonts/DroidSans-Bold.ttf
+font /system/fonts/Roboto-Regular.ttf
+
+vSpace 50
+
+TEXT
+${alignc}CLW
