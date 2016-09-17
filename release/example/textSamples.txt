@@ -1,0 +1,30 @@
+width 440
+height 480
+
+fontSize 45
+fontOutSize 0
+
+fontShadowColor #57D9FF
+fontShadowBlur  0
+fontShadowX 5
+fontShadowY 5
+
+fontOutColor #4497FF
+fontColor #ffffff
+
+xOffsetRight 6
+xOffsetLeft 6
+#bgColor red
+
+font /system/fonts/DroidSans-Bold.ttf
+
+vSpace 9
+color1 #4497FF
+
+lineWidth 3
+
+TEXT
+${alignc}Normal text
+${alignc}${fontOutSize 6}Outline text${fontOutSize}
+${alignc}${fontShadowBlur 2}Shadow text
+${alignc}${fontOutSize 6}Both text${fontShadowBlur}${fontOutSize}

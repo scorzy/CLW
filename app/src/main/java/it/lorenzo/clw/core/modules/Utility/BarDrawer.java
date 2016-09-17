@@ -28,11 +28,12 @@ public class BarDrawer {
         Bitmap bmp = Bitmap
                 .createBitmap(width, height, Bitmap.Config.ARGB_8888);
         Canvas c = new Canvas(bmp);
-
+        // c.drawColor(Color.BLUE);
         float strk = fillPaint.getStrokeWidth();
 
-        float x1 = strk + txtMan.getBoundsMarginX();
-        float x2 = width - txtMan.getBoundsMarginX();
+        float x1 = strk + txtMan.getBoundsMarginX()/2;
+        float x2 = width - txtMan.getBoundsMarginX()/2;
+
         float y1 = strk + height * (float) 0.1;
         float y2 = height - descent;
 

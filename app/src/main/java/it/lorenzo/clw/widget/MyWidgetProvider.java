@@ -71,14 +71,14 @@ public class MyWidgetProvider extends AppWidgetProvider {
                                     PendingIntent.FLAG_UPDATE_CURRENT));
 
                     appWidgetManager.updateAppWidget(n, remoteViews);
-                    Log.i("n", "" + n);
+                    //Log.i("n", "" + n);
                 } catch (Exception e) {
                     remoteViews = new RemoteViews(
                             context.getPackageName(), R.layout.clickme);
                     if (notification)
                         sendNotification(context, e.getMessage());
                     remoteViews.setTextViewText(button1, "ERROR: " + e.getMessage() + "\n tap to reload");
-                    Log.i("error: ", e.getMessage());
+                    //Log.i("error: ", e.getMessage());
                     Intent intent = new Intent();
                     intent.setAction("it.lorenzo.clw.intent.action.CHANGE_PICTURE");
                     int ids[] = new int[1];
@@ -107,8 +107,6 @@ public class MyWidgetProvider extends AppWidgetProvider {
                 Context.MODE_PRIVATE);
         Boolean update = sharedPref.getBoolean("alarm_key", false);
         int intervall = sharedPref.getInt("intervall_key", 30);
-        //	Log.i("alarm created", "" + update);
-        //	Log.i("alarm created", "" + intervall);
         if (update) {
             AlarmManager am = (AlarmManager) context
                     .getSystemService(Context.ALARM_SERVICE);
@@ -175,7 +173,7 @@ public class MyWidgetProvider extends AppWidgetProvider {
         } else if (AppWidgetManager.ACTION_APPWIDGET_UPDATE.equals(act)
                 || act.equals("it.lorenzo.clw.intent.action.ALARM")) {
 
-
+            Log.i("alarm", "asd");
             AppWidgetManager man = AppWidgetManager.getInstance(context);
             int[] ids = man.getAppWidgetIds(
                     new ComponentName(context, MyWidgetProvider.class));
@@ -191,7 +189,6 @@ public class MyWidgetProvider extends AppWidgetProvider {
                 .setContentTitle("CLW ERROR").setContentText(text);
         NotificationManager mNotificationManager = (NotificationManager) context
                 .getSystemService(Context.NOTIFICATION_SERVICE);
-        // mId allows you to update the notification later on.
         mNotificationManager.notify(5, mBuilder.build());
     }
 }

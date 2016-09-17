@@ -69,25 +69,28 @@ public abstract class AbstractTop extends AbstractMobule {
 
     @Override
     public String getString(String key, String[] params) {
-        if (params != null && params[0] != null && params[1] != null) {
-            switch (params[0]) {
-                case "name":
-                    return processList.get(Integer.parseInt(params[1])).getName();
-                case "shortName":
-                    String shortName = processList.get(Integer.parseInt(params[1])).getShortName();
-                    if (shortName.trim().length() > 0)
-                        return shortName;
-                    else
-                        return processList.get(Integer.parseInt(params[1])).getName();
-                case "pid":
-                    return processList.get(Integer.parseInt(params[1])).getPid();
-                case "cpu":
-                    return processList.get(Integer.parseInt(params[1])).getCpu();
-                case "mem":
-                    String mem = processList.get(Integer.parseInt(params[1])).getMem();
-                    mem = mem.substring(0, mem.length() - 1);
-                    return CommonUtility.convert(Long.parseLong(mem), 1);
-            }
+        if (params != null && params[0] != null && params[1] != null) switch (params[0]) {
+            case "name":
+                return processList.get(Integer.parseInt(params[1])).getName();
+            case "shortName":
+                String shortName = processList.get(Integer.parseInt(params[1])).getShortName();
+                if (shortName.trim().length() > 0)
+                    return shortName;
+                else {
+                    String longName = processList.get(Integer.parseInt(params[1])).getName();
+                    String[] arr = longName.split("\\.");
+                    if (arr.length == 0)
+                        return longName;
+                    return arr[arr.length - 1];
+                }
+            case "pid":
+                return processList.get(Integer.parseInt(params[1])).getPid();
+            case "cpu":
+                return processList.get(Integer.parseInt(params[1])).getCpu();
+            case "mem":
+                String mem = processList.get(Integer.parseInt(params[1])).getMem();
+                mem = mem.substring(0, mem.length() - 1);
+                return CommonUtility.convert(Long.parseLong(mem), 1);
         }
         return null;
     }

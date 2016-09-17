@@ -54,6 +54,8 @@ public class Core {
     private int bgColor = 0;
     private int xOffsetLeft = 0;
     private int xOffsetRight = 0;
+    private int xOffsetLeftRestore = 0;
+    private int xOffsetRightRestore = 0;
     private String toPrint;
     private Rect bounds;
     private int allign;
@@ -61,6 +63,7 @@ public class Core {
     private float y;
     private int height;
     private int vSpace = 0;
+    private int vSpaceRestore = 0;
     private boolean status;
 
     private Core() {
@@ -113,8 +116,10 @@ public class Core {
             for (String line : lines) {
                 centerLenght = 0;
                 rightLenght = 0;
-                // draw center stuff
                 newy += drawLine(line, y) + vSpace + txtMan.getStrokePaint().getFontMetrics().leading;
+                vSpace = vSpaceRestore;
+                xOffsetLeft = xOffsetLeftRestore;
+                xOffsetRight = xOffsetRightRestore;
                 y = newy;
             }
         } catch (Exception e) {
@@ -201,6 +206,16 @@ public class Core {
                     case HLINE:
                         printText();
                         txtMan.drawLine(c, currentX, y + height);
+                        break;
+                    case VSPACE:
+                        vSpace = Integer.parseInt(params[params.length - 1]);
+                        break;
+                    case XOFFLEFT:
+                        this.xOffsetLeft = Integer.parseInt(params[params.length - 1]);
+                        currentX = xOffsetLeft;
+                        break;
+                    case XOFFRIGHT:
+                        this.xOffsetRight = Integer.parseInt(params[params.length - 1]);
                         break;
                     default:
                         // altro;
@@ -306,6 +321,7 @@ public class Core {
         xOffsetLeft = 0;
         xOffsetRight = 0;
         vSpace = 0;
+        vSpaceRestore = 0;
         while (((line = br.readLine()) != null) && (!line.equals("TEXT"))) {
             line = line.trim();
             if (!line.startsWith("#") && !line.isEmpty()) {
@@ -346,14 +362,17 @@ public class Core {
 
             case XOFFRIGHT:
                 xOffsetRight = Integer.parseInt(element[1]);
+                xOffsetRightRestore = xOffsetRight;
                 return true;
 
             case XOFFLEFT:
                 xOffsetLeft = Integer.parseInt(element[1]);
+                xOffsetLeftRestore = xOffsetLeft;
                 return true;
 
             case VSPACE:
                 vSpace = Integer.parseInt(element[1]);
+                vSpaceRestore = vSpace;
                 return true;
         }
         return false;

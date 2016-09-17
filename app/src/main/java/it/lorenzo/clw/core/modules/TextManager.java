@@ -151,7 +151,7 @@ public class TextManager implements Module {
 
     public void setDefaults(String[] elements) {
         String key = elements[0];
-        String value = elements[1];
+        String value = elements[elements.length - 1];
         parse(key, value, 0);
     }
 
