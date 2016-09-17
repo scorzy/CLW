@@ -5,21 +5,19 @@ package it.lorenzo.clw.core.modules;
  */
 public class TopCpu extends AbstractTop {
 
-	public static final String TOP = "top";
+    public static final String TOP = "top";
 
-	public TopCpu() {
-		order = "-s cpu";
-		keys.put(TOP, Result.string);
-	}
+    public TopCpu() {
+        order = "-s cpu";
+        keys.put(TOP, Result.string);
+    }
 
-	@Override
-	public String getString(String key, String[] params) {
-		if (key.equals(TOP))
-			return super.getString(key, params);
-		else return "";
-	}
-
-
+    @Override
+    public String getString(String key, String[] params) {
+        if (key.equals(TOP))
+            return super.getString(key, params);
+        else return "";
+    }
 
 
 }

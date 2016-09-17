@@ -6,7 +6,7 @@
     <string name="action_settings">Settings</string>
     <string name="Select">Select a configuration file</string>
     <string name="Save">Save</string>
-    <string name="preference">it.provawidget.preference</string>
+    <string name="preference">it.lorenzo.clw.preference</string>
     <string name="clickMe">Click me to select configuration file</string>
     <string name="Browse">Browse</string>
     <string name="title_activity_file_chooser">Choose a file</string>
@@ -23,5 +23,6 @@
     <string name="title_activity_calendar_ids">CalendarIDS</string>
 
     <string name="hello_world">Hello world!</string>
+    <string name="browse_external">Select with external app.</string>
 
 </resources>

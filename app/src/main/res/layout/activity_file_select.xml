@@ -3,18 +3,27 @@
               android:layout_height="wrap_content"
               android:orientation="vertical">
 
+
     <TextView
         android:id="@+id/textView1"
+        style="@style/Base.TextAppearance.AppCompat.Large"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/Select"/>
+        android:text="@string/Select" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="browse_ext"
+        android:text="@string/browse_external" />
 
     <Button
         android:id="@+id/browse"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/Browse"
-        android:onClick="browse"/>
+        android:onClick="browse"
+        android:text="@string/Browse" />
 
 
     <EditText

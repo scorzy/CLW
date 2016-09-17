@@ -3,11 +3,11 @@ package it.lorenzo.clw.chooser;
 /**
  * Created by lorenzo on 17/02/15.
  */
+
 import android.app.ListActivity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.MatrixCursor;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,9 +16,11 @@ import android.widget.GridLayout;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.SimpleCursorAdapter.ViewBinder;
-import it.lorenzo.clw.R;
 
 import java.io.File;
+import java.util.Arrays;
+
+import it.lorenzo.clw.R;
 
 public class FileChooser extends ListActivity {
 
@@ -29,12 +31,7 @@ public class FileChooser extends ListActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // setContentView(R.layout.activity_file_chooser);
-        // Make sure we're running on Honeycomb or higher to use ActionBar APIs
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            // Show the Up button in the action bar.
-            getActionBar().setDisplayHomeAsUpEnabled(true);
-        }
+
         String[] from = {"name", "absolutePath", "img"};
         int[] to = {R.id.fileName, R.id.fileName, R.id.imageView1};
         mAdapter = new SimpleCursorAdapter(this, R.layout.line, null, from, to,
@@ -57,7 +54,6 @@ public class FileChooser extends ListActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.file_chooser, menu);
         return true;
     }
@@ -69,17 +65,20 @@ public class FileChooser extends ListActivity {
         current = dir;
         File[] files = dir.listFiles();
         if (files != null) {
-            int n = 0;
-            for (File children : files) {
-                Object[] row = new Object[4];
-                row[3] = "" + ++n;
-                row[0] = children.getName();
-                row[1] = children.getAbsolutePath();
-                if (children.isDirectory())
-                    row[2] = R.drawable.folder;
-                else
-                    row[2] = R.drawable.unknown;
-                data.addRow(row);
+            Arrays.sort(files);
+            if (files.length > 0) {
+                int n = 0;
+                for (File children : files) {
+                    Object[] row = new Object[4];
+                    row[3] = "" + ++n;
+                    row[0] = children.getName();
+                    row[1] = children.getAbsolutePath();
+                    if (children.isDirectory())
+                        row[2] = R.drawable.folder;
+                    else
+                        row[2] = R.drawable.unknown;
+                    data.addRow(row);
+                }
             }
         }
         mAdapter.swapCursor(data);
@@ -91,13 +90,11 @@ public class FileChooser extends ListActivity {
 
         File file = new File((String) ((GridLayout) v).getChildAt(1).getTag());
 
-        // File file = new File((String) v.getTag());
         if (file.isDirectory())
             setPath(file.getAbsolutePath());
         else {
             Intent intent = new Intent(this, FileSelect.class);
             intent.putExtra("path", file.getAbsolutePath());
-            // intent.putExtra("appWidgetId", id);
             setResult(100, intent);
             finish();
         }
@@ -105,7 +102,6 @@ public class FileChooser extends ListActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle presses on the action bar items
         switch (item.getItemId()) {
             case R.id.action_parent:
                 String parent = current.getParent();

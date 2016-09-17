@@ -7,22 +7,22 @@ import java.util.HashMap;
  */
 public abstract class AbstractMobule implements Module {
 
-	protected HashMap<String, Result> keys;
+    protected HashMap<String, Result> keys;
 
-	public AbstractMobule() {
-		keys = new HashMap<String, Result>();
-	}
+    public AbstractMobule() {
+        keys = new HashMap<String, Result>();
+    }
 
-	@Override
-	public void setDefaults( String[] elements) {
+    @Override
+    public void setDefaults(String[] elements) {
 
-	}
+    }
 
-	@Override
-	public Result check(String key) {
-		Result res = keys.get(key);
-		if (res == null)
-			return Result.no;
-		return res;
-	}
+    @Override
+    public Result check(String key) {
+        Result res = keys.get(key);
+        if (res == null)
+            return Result.no;
+        return res;
+    }
 }

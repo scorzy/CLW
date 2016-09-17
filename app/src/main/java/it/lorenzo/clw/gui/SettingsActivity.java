@@ -1,8 +1,10 @@
 package it.lorenzo.clw.gui;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
@@ -12,6 +14,16 @@ import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
+import android.support.annotation.LayoutRes;
+import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatDelegate;
+import android.support.v7.widget.Toolbar;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Toast;
 
 import it.lorenzo.clw.R;
 
@@ -27,165 +39,246 @@ import it.lorenzo.clw.R;
  * API Guide</a> for more information on developing a Settings UI.
  */
 public class SettingsActivity extends PreferenceActivity implements Preference.OnPreferenceChangeListener {
-	/**
-	 * Determines whether to always show the simplified settings UI, where
-	 * settings are presented in a single list. When false, settings are shown
-	 * as a master/detail two-pane view on tablets. When true, a single pane is
-	 * shown on tablets.
-	 */
-	private static final boolean ALWAYS_SIMPLE_PREFS = false;
 
-	/**
-	 * Helper method to determine if the device has an extra-large screen. For
-	 * example, 10" tablets are extra-large.
-	 */
-	private static boolean isXLargeTablet(Context context) {
-		return (context.getResources().getConfiguration().screenLayout
-				& Configuration.SCREENLAYOUT_SIZE_MASK) >= Configuration.SCREENLAYOUT_SIZE_XLARGE;
-	}
+    /**
+     * Determines whether to always show the simplified settings UI, where
+     * settings are presented in a single list. When false, settings are shown
+     * as a master/detail two-pane view on tablets. When true, a single pane is
+     * shown on tablets.
+     */
+    private static final boolean ALWAYS_SIMPLE_PREFS = false;
+    private AppCompatDelegate mDelegate;
 
-	/**
-	 * Determines whether the simplified settings UI should be shown. This is
-	 * true if this is forced via {@link #ALWAYS_SIMPLE_PREFS}, or the device
-	 * doesn't have newer APIs like {@link PreferenceFragment}, or the device
-	 * doesn't have an extra-large screen. In these cases, a single-pane
-	 * "simplified" settings UI should be shown.
-	 */
-	private static boolean isSimplePreferences(Context context) {
-		return ALWAYS_SIMPLE_PREFS
-				|| Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB
-				|| !isXLargeTablet(context);
-	}
+    /**
+     * Helper method to determine if the device has an extra-large screen. For
+     * example, 10" tablets are extra-large.
+     */
+    private static boolean isXLargeTablet(Context context) {
+        return (context.getResources().getConfiguration().screenLayout
+                & Configuration.SCREENLAYOUT_SIZE_MASK) >= Configuration.SCREENLAYOUT_SIZE_XLARGE;
+    }
 
-	/**
-	 * Binds a preference's summary to its value. More specifically, when the
-	 * preference's value is changed, its summary (line of text below the
-	 * preference title) is updated to reflect the value. The summary is also
-	 * immediately updated upon calling this method. The exact display format is
-	 * dependent on the type of preference.
-	 */
-	private void bindPreferenceSummaryToInt(Preference preference) {
-		// Set the listener to watch for value changes.
-		preference.setOnPreferenceChangeListener(this);
+    /**
+     * Determines whether the simplified settings UI should be shown. This is
+     * true if this is forced via {@link #ALWAYS_SIMPLE_PREFS}, or the device
+     * doesn't have newer APIs like {@link PreferenceFragment}, or the device
+     * doesn't have an extra-large screen. In these cases, a single-pane
+     * "simplified" settings UI should be shown.
+     */
+    private static boolean isSimplePreferences(Context context) {
+        return ALWAYS_SIMPLE_PREFS
+                || Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB
+                || !isXLargeTablet(context);
+    }
 
-		// Trigger the listener immediately with the preference's
-		// current value.
+    /**
+     * Binds a preference's summary to its value. More specifically, when the
+     * preference's value is changed, its summary (line of text below the
+     * preference title) is updated to reflect the value. The summary is also
+     * immediately updated upon calling this method. The exact display format is
+     * dependent on the type of preference.
+     */
+    private void bindPreferenceSummaryToInt(Preference preference) {
+        // Set the listener to watch for value changes.
+        preference.setOnPreferenceChangeListener(this);
 
-		onPreferenceChange(preference,
-				PreferenceManager
-						.getDefaultSharedPreferences(preference.getContext())
-						.getString(preference.getKey(), "30"));
+        // Trigger the listener immediately with the preference's
+        // current value.
 
-	}
+        onPreferenceChange(preference,
+                PreferenceManager
+                        .getDefaultSharedPreferences(preference.getContext())
+                        .getString(preference.getKey(), "30"));
 
-	private void bindPreferenceSummaryToBoolean(Preference preference) {
-		// Set the listener to watch for value changes.
-		preference.setOnPreferenceChangeListener(this);
+    }
 
-		// Trigger the listener immediately with the preference's
-		// current value.
+    private void bindPreferenceSummaryToBoolean(Preference preference) {
+        // Set the listener to watch for value changes.
+        preference.setOnPreferenceChangeListener(this);
 
-		onPreferenceChange(preference,
-				PreferenceManager
-						.getDefaultSharedPreferences(preference.getContext())
-						.getBoolean(preference.getKey(), false));
+        // Trigger the listener immediately with the preference's
+        // current value.
 
-	}
+        onPreferenceChange(preference,
+                PreferenceManager
+                        .getDefaultSharedPreferences(preference.getContext())
+                        .getBoolean(preference.getKey(), false));
 
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		addPreferencesFromResource(R.xml.pref_general);
+    }
 
-		Preference button = (Preference) getPreferenceManager().findPreference("idsbutton");
-		if (button != null) {
-			button.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-				@Override
-				public boolean onPreferenceClick(Preference arg0) {
-					showCalendarIds();
-					return true;
-				}
-			});
-		}
-	}
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        getDelegate().installViewFactory();
+        getDelegate().onCreate(savedInstanceState);
+        super.onCreate(savedInstanceState);
+        addPreferencesFromResource(R.xml.pref_general);
 
-	private void showCalendarIds() {
-		Intent intent = new Intent(this, CalendarIDS.class);
-		startActivity(intent);
-	}
+        Preference button = getPreferenceManager().findPreference("idsbutton");
+        if (button != null) {
+            button.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference arg0) {
+                    showCalendarIds();
+                    return true;
+                }
+            });
+        }
+    }
 
-	@Override
-	public boolean onPreferenceChange(Preference preference, Object value) {
-		String stringValue = value.toString();
-		SharedPreferences sharedPref = this.getSharedPreferences(
-				getString(R.string.preference), Context.MODE_PRIVATE);
-		SharedPreferences.Editor editor = sharedPref.edit();
+    public ActionBar getSupportActionBar() {
+        return getDelegate().getSupportActionBar();
+    }
 
-		if (preference instanceof CheckBoxPreference) {
-			editor.putBoolean(preference.getKey(), (Boolean) value);
-			editor.commit();
+    public void setSupportActionBar(@Nullable Toolbar toolbar) {
+        getDelegate().setSupportActionBar(toolbar);
+    }
 
-		} else if (preference.getKey().equals("intervall_key")) {
-			editor.putInt(preference.getKey(), Integer.parseInt(stringValue));
-			editor.commit();
+    private void showCalendarIds() {
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.READ_CALENDAR)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.READ_CALENDAR},
+                    116);
 
-		}
-		if (preference instanceof ListPreference) {
-			// For list preferences, look up the correct display value in
-			// the preference's 'entries' list.
-			ListPreference listPreference = (ListPreference) preference;
-			int index = listPreference.findIndexOfValue(stringValue);
-			// Set the summary to reflect the new value.
-			preference.setSummary(
-					index >= 0
-							? listPreference.getEntries()[index]
-							: null);
-		} else {
-			// For all other preferences, set the summary to the value's
-			// simple string representation.
-			preference.setSummary(stringValue);
-		}
-		Intent intent = new Intent();
-		intent.setAction("it.lorenzo.clw.intent.action.SETTINGS_CHANGED");
-		sendBroadcast(intent);
-		return true;
-	}
+        } else {
+            Intent intent = new Intent(this, CalendarIDS.class);
+            startActivity(intent);
+        }
+    }
 
-	@Override
-	protected void onPostCreate(Bundle savedInstanceState) {
-		super.onPostCreate(savedInstanceState);
-		setupSimplePreferencesScreen();
-	}
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case 116: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
-	/**
-	 * Shows the simplified settings UI if the device configuration if the
-	 * device configuration dictates that a simplified, single-pane UI should be
-	 * shown.
-	 */
-	private void setupSimplePreferencesScreen() {
-		if (!isSimplePreferences(this)) {
-			return;
-		}
+                    Intent intent = new Intent(this, CalendarIDS.class);
+                    startActivity(intent);
 
-		// In the simplified UI, fragments are not used at all and we instead
-		// use the older PreferenceActivity APIs.
+                } else {
 
-		// Add 'general' preferences.
-		//addPreferencesFromResource(R.xml.pref_general);
+                    Toast.makeText(this, "Please grant permission.", Toast.LENGTH_SHORT).show();
+                }
+                return;
+            }
+        }
+    }
 
-		// Bind the summaries of EditText/List/Dialog/Ringtone preferences to
-		// their values. When their values change, their summaries are updated
-		// to reflect the new value, per the Android Design guidelines.
-		bindPreferenceSummaryToBoolean(findPreference("alarm_key"));
-		bindPreferenceSummaryToInt(findPreference("intervall_key"));
-		bindPreferenceSummaryToBoolean(findPreference("use_notification_key"));
-	}
+    @Override
+    public boolean onPreferenceChange(Preference preference, Object value) {
+        String stringValue = value.toString();
+        SharedPreferences sharedPref = this.getSharedPreferences(
+                getString(R.string.preference), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public boolean onIsMultiPane() {
-		return isXLargeTablet(this) && !isSimplePreferences(this);
-	}
+        if (preference instanceof CheckBoxPreference) {
+            editor.putBoolean(preference.getKey(), (Boolean) value);
+            editor.commit();
+
+        } else if (preference.getKey().equals("intervall_key")) {
+            editor.putInt(preference.getKey(), Integer.parseInt(stringValue));
+            editor.commit();
+
+        }
+        if (preference instanceof ListPreference) {
+            // For list preferences, look up the correct display value in
+            // the preference's 'entries' list.
+            ListPreference listPreference = (ListPreference) preference;
+            int index = listPreference.findIndexOfValue(stringValue);
+            // Set the summary to reflect the new value.
+            preference.setSummary(
+                    index >= 0
+                            ? listPreference.getEntries()[index]
+                            : null);
+        } else {
+            // For all other preferences, set the summary to the value's
+            // simple string representation.
+            preference.setSummary(stringValue);
+        }
+        Intent intent = new Intent();
+        intent.setAction("it.lorenzo.clw.intent.action.SETTINGS_CHANGED");
+        sendBroadcast(intent);
+        return true;
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        setupSimplePreferencesScreen();
+    }
+
+    private void setupSimplePreferencesScreen() {
+        if (!isSimplePreferences(this)) {
+            return;
+        }
+        bindPreferenceSummaryToBoolean(findPreference("alarm_key"));
+        bindPreferenceSummaryToInt(findPreference("intervall_key"));
+        bindPreferenceSummaryToBoolean(findPreference("use_notification_key"));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean onIsMultiPane() {
+        return isXLargeTablet(this) && !isSimplePreferences(this);
+    }
+
+    private AppCompatDelegate getDelegate() {
+        if (mDelegate == null) {
+            mDelegate = AppCompatDelegate.create(this, null);
+        }
+        return mDelegate;
+    }
+
+    @Override
+    public void setContentView(@LayoutRes int layoutResID) {
+        getDelegate().setContentView(layoutResID);
+    }
+
+    @Override
+    public void setContentView(View view, ViewGroup.LayoutParams params) {
+        getDelegate().setContentView(view, params);
+    }
+
+    @Override
+    public void addContentView(View view, ViewGroup.LayoutParams params) {
+        getDelegate().addContentView(view, params);
+    }
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        getDelegate().onPostResume();
+    }
+
+    @Override
+    protected void onTitleChanged(CharSequence title, int color) {
+        super.onTitleChanged(title, color);
+        getDelegate().setTitle(title);
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        getDelegate().onConfigurationChanged(newConfig);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        getDelegate().onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        getDelegate().onDestroy();
+    }
+
+
 }

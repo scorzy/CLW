@@ -3,10 +3,18 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/my_awesome_toolbar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize" />
+
     <ListView
         android:id="@+id/listView"
+        style="@android:style/TextAppearance.DeviceDefault.Large"
         android:layout_width="fill_parent"
         android:layout_height="0dp"
-        android:layout_weight="7"/>
+        android:layout_weight="5" />
 
 </LinearLayout>

@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/GridLayout1"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:columnCount="3"
     android:orientation="horizontal"
-    android:rowCount="2"
-    tools:context=".GridXMLActivity">
+    android:rowCount="2">
 
     <ImageView
         android:id="@+id/imageView1"
@@ -25,5 +23,6 @@
         android:tag="absolutePath"
         android:text="name"
         android:textAppearance="?android:attr/textAppearanceLarge" />
+
 
 </GridLayout>
