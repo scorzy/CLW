@@ -24,5 +24,7 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="browse_external">Select with external app.</string>
+    <string name="example">use example file</string>
+    <string name="use_example">Select Me !</string>
 
 </resources>

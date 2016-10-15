@@ -2,13 +2,13 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 24
-    buildToolsVersion '24.0.2'
+    buildToolsVersion '24.0.3'
     defaultConfig {
         applicationId "it.lorenzo.clw"
         minSdkVersion 14
         targetSdkVersion 24
         versionCode 1
-        versionName '1.0.6'
+        versionName '1.0.8'
     }
     buildTypes {
         release {
@@ -29,4 +29,5 @@ android {
 
 dependencies {
     compile 'com.android.support:appcompat-v7:24.2.1'
+    compile 'com.android.support:recyclerview-v7:21.0.+'
 }

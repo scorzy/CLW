@@ -8,6 +8,7 @@ import android.app.ListActivity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.MatrixCursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -24,7 +25,6 @@ import it.lorenzo.clw.R;
 
 public class FileChooser extends ListActivity {
 
-    // private int id;
     private SimpleCursorAdapter mAdapter;
     private File current;
 
@@ -95,6 +95,7 @@ public class FileChooser extends ListActivity {
         else {
             Intent intent = new Intent(this, FileSelect.class);
             intent.putExtra("path", file.getAbsolutePath());
+            intent.setData(Uri.fromFile(file));
             setResult(100, intent);
             finish();
         }

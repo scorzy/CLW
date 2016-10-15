@@ -60,6 +60,25 @@ public class FileSelect extends AppCompatActivity {
         }
     }
 
+    private void requirePermissionWrite() {
+        if (Build.VERSION.SDK_INT > 16) {
+            if (ContextCompat.checkSelfPermission(this,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        115);
+            }
+        }
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.READ_CALENDAR)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.READ_CALENDAR},
+                    116);
+        }
+    }
+
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[], int[] grantResults) {
@@ -128,7 +147,7 @@ public class FileSelect extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode,
                                     Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
-        if (resultCode == 100 || resultCode == RESULT_OK) {
+        if ((resultCode == 100 || resultCode == RESULT_OK) && intent != null) {
             String path = intent.getData().getPath();
             if (path != null) {
                 save(path);
@@ -143,4 +162,10 @@ public class FileSelect extends AppCompatActivity {
 		return true;
 	}
 */
+public void useExample(View view) {
+    requirePermissionWrite();
+    Intent intent = new Intent(this, exampleselector.class);
+    this.startActivityForResult(intent, 100);
+}
+
 }
