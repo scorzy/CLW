@@ -32,6 +32,8 @@ public class FileSelect extends AppCompatActivity {
 
         setContentView(R.layout.activity_file_select);
 
+        requirePermission();
+
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
         if (extras != null) {
@@ -44,38 +46,26 @@ public class FileSelect extends AppCompatActivity {
     private void requirePermission() {
         if (Build.VERSION.SDK_INT > 16) {
             if (ContextCompat.checkSelfPermission(this,
-                    Manifest.permission.READ_EXTERNAL_STORAGE)
-                    != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(this,
-                        new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
-                        115);
-            }
-        }
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.READ_CALENDAR)
-                != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.READ_CALENDAR},
-                    116);
-        }
-    }
-
-    private void requirePermissionWrite() {
-        if (Build.VERSION.SDK_INT > 16) {
-            if (ContextCompat.checkSelfPermission(this,
                     Manifest.permission.WRITE_EXTERNAL_STORAGE)
                     != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(this,
                         new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
                         115);
             }
-        }
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.READ_CALENDAR)
-                != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.READ_CALENDAR},
-                    116);
+            if (ContextCompat.checkSelfPermission(this,
+                    Manifest.permission.READ_EXTERNAL_STORAGE)
+                    != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                        115);
+            }
+            if (ContextCompat.checkSelfPermission(this,
+                    Manifest.permission.READ_CALENDAR)
+                    != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.READ_CALENDAR},
+                        116);
+            }
         }
     }
 
@@ -96,7 +86,6 @@ public class FileSelect extends AppCompatActivity {
                     // permission denied, boo! Disable the
                     // functionality that depends on this permission.
                 }
-                return;
             }
         }
     }
@@ -115,6 +104,8 @@ public class FileSelect extends AppCompatActivity {
         intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, id);
         sendBroadcast(intent);
         setResult(RESULT_OK, intent);
+
+        Toast.makeText(this, "Using \n" + path, Toast.LENGTH_LONG).show();
 
         this.finish();
     }
@@ -139,7 +130,7 @@ public class FileSelect extends AppCompatActivity {
         try {
             startActivityForResult(intent, 100);
         } catch (android.content.ActivityNotFoundException ex) {
-            Toast.makeText(this, "Please install a File Manager.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Please install a File Manager.", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -155,17 +146,10 @@ public class FileSelect extends AppCompatActivity {
         }
 
     }
-/*
-    @Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.file_select, menu);
-		return true;
-	}
-*/
-public void useExample(View view) {
-    requirePermissionWrite();
-    Intent intent = new Intent(this, exampleselector.class);
-    this.startActivityForResult(intent, 100);
-}
+
+    public void useExample(View view) {
+        Intent intent = new Intent(this, exampleselector.class);
+        this.startActivityForResult(intent, 100);
+    }
 
 }

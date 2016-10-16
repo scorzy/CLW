@@ -1,6 +1,7 @@
 package it.lorenzo.clw.core.modules;
 
 import android.content.ContentUris;
+import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -12,8 +13,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
-
-import it.lorenzo.clw.core.Core;
 
 /**
  * Created by lorenzo on 24/03/15.
@@ -68,15 +67,18 @@ public class Agenda extends AbstractMobule {
 	}
 
 	@Override
-	public String getString(String key, String[] params) {
+	public String getString(String key, String[] params, Context context) {
 		if (key.equals(AGENDA)) {
+			if (cursor == null) {
+				readCalendarEvent(context);
+			}
 			if (cursor.moveToPosition(Integer.parseInt(params[1]))) {
 				boolean allDay = cursor.getString(5).equals("1");
 				GregorianCalendar start = new GregorianCalendar();
 				start.setTimeInMillis(Long.parseLong(cursor.getString(3)));
 				GregorianCalendar end = new GregorianCalendar();
 				end.setTimeInMillis(Long.parseLong(cursor.getString(4)));
-				Locale current = Core.getInstance().getContext().getResources().getConfiguration().locale;
+				Locale current = context.getResources().getConfiguration().locale;
 				SimpleDateFormat dayShort = new SimpleDateFormat("E", current);
 				SimpleDateFormat dayLong = new SimpleDateFormat("EEEE", current);
 
@@ -134,18 +136,18 @@ public class Agenda extends AbstractMobule {
 	}
 
 	@Override
-	public void changeSetting(String key, String[] params) {
+	public void changeSetting(String key, String[] params, Context context) {
 	}
 
 	@Override
-	public Bitmap GetBmp(String key, String[] params, int maxWidth) {
+	public Bitmap GetBmp(String key, String[] params, int maxWidth, Context context) {
 		return null;
 	}
 
 	@Override
-	public void inizialize() {
+	public void inizialize(Context context) {
 		if (!calendarQuery.isEmpty()) {
-			readCalendarEvent();
+			readCalendarEvent(context);
 		}
 	}
 
@@ -166,7 +168,7 @@ public class Agenda extends AbstractMobule {
 		}
 	}
 
-	private void readCalendarEvent() {
+	private void readCalendarEvent(Context context) {
 		long now = new Date(System.currentTimeMillis()).getTime();
 		Calendar c = Calendar.getInstance();
 		c.setTimeInMillis(now);
@@ -177,6 +179,6 @@ public class Agenda extends AbstractMobule {
 		ContentUris.appendId(eventsUriBuilder, now);
 		ContentUris.appendId(eventsUriBuilder, max);
 		Uri eventsUri = eventsUriBuilder.build();
-		cursor = Core.getInstance().getContext().getContentResolver().query(eventsUri, EVENTS, " ( " + calendarQuery + " ) ", null, CalendarContract.Instances.BEGIN + " ASC");
+		cursor = context.getContentResolver().query(eventsUri, EVENTS, " ( " + calendarQuery + " ) ", null, CalendarContract.Instances.BEGIN + " ASC");
 	}
 }

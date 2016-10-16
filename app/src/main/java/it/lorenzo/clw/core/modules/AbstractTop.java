@@ -1,6 +1,7 @@
 package it.lorenzo.clw.core.modules;
 
 import android.app.ActivityManager;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 
@@ -9,7 +10,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import it.lorenzo.clw.core.Core;
 import it.lorenzo.clw.core.modules.Utility.CommonUtility;
 
 /**
@@ -28,12 +28,12 @@ public abstract class AbstractTop extends AbstractMobule {
         topTime = 0;
     }
 
-    private String getAppName(int pID) {
+    private String getAppName(int pID, Context context) {
         String processName = "";
-        ActivityManager am = (ActivityManager) Core.getInstance().getContext().getSystemService(Core.getInstance().getContext().ACTIVITY_SERVICE);
+        ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
         List l = am.getRunningAppProcesses();
         Iterator i = l.iterator();
-        PackageManager pm = Core.getInstance().getContext().getPackageManager();
+        PackageManager pm = context.getPackageManager();
         while (i.hasNext()) {
             ActivityManager.RunningAppProcessInfo info = (ActivityManager.RunningAppProcessInfo) (i.next());
             try {
@@ -53,7 +53,7 @@ public abstract class AbstractTop extends AbstractMobule {
         return processName;
     }
 
-    protected void getProcess() {
+    protected void getProcess(Context context) {
         ArrayList<String> strings = CommonUtility.executeCommandToArray(cmd + topTime + " " + order);
         Iterator<String> it = strings.iterator();
         processList = new LinkedList<>();
@@ -62,13 +62,13 @@ public abstract class AbstractTop extends AbstractMobule {
         while (it.hasNext()) {
             String line = it.next();
             if (line != null) {
-                processList.addLast(new Process(line.trim()));
+                processList.addLast(new Process(line.trim(), context));
             }
         }
     }
 
     @Override
-    public String getString(String key, String[] params) {
+    public String getString(String key, String[] params, Context context) {
         if (params != null && params[0] != null && params[1] != null) switch (params[0]) {
             case "name":
                 return processList.get(Integer.parseInt(params[1])).getName();
@@ -96,7 +96,7 @@ public abstract class AbstractTop extends AbstractMobule {
     }
 
     @Override
-    public void changeSetting(String key, String[] params) {
+    public void changeSetting(String key, String[] params, Context context) {
     }
 
     @Override
@@ -107,12 +107,12 @@ public abstract class AbstractTop extends AbstractMobule {
     }
 
     @Override
-    public void inizialize() {
-        getProcess();
+    public void inizialize(Context context) {
+        getProcess(context);
     }
 
     @Override
-    public Bitmap GetBmp(String key, String[] params, int maxWidth) {
+    public Bitmap GetBmp(String key, String[] params, int maxWidth, Context context) {
         return null;
     }
 
@@ -123,14 +123,14 @@ public abstract class AbstractTop extends AbstractMobule {
         private String mem;
         private String shortName;
 
-        public Process(String line) {
+        public Process(String line, Context context) {
             String[] stuff = line.split("\\s+");
 
             pid = stuff[0];
             name = stuff[stuff.length - 1];
             cpu = stuff[2];
             mem = stuff[6];
-            shortName = getAppName(Integer.parseInt(pid));
+            shortName = getAppName(Integer.parseInt(pid), context);
         }
 
         public String getName() {

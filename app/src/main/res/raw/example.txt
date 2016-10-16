@@ -1,12 +1,15 @@
+# This is a comment
+# for info:
+# https://github.com/scorzy/CLW/wiki
+
 width 440
 height 480
 
 fontSize 19
-fontOutSize 6
+fontOutSize 4
 
 fontShadowColor #70000000
-#fontShadowColor #F5C600
-fontShadowBlur 8
+fontShadowBlur 5
 fontShadowX 0
 fontShadowY 0
 
@@ -15,21 +18,19 @@ fontColor #ffffff
 
 xOffsetRight 6
 xOffsetLeft 6
+
+# Backgroud color, useful for testing
 #bgColor red
 
-#font /system/fonts/DroidSans-Bold.ttf
-font /system/fonts/Roboto-Regular.ttf
+# For android Lollipop and newer
+# disabled for compatibility
+# font /system/fonts/Roboto-Regular.ttf
 
 vSpace 0
 color1 #ffa029
 
-future 60
-calendars_ids 10
-topTime 0
-lineWidth 2
-
 TEXT
-${font /system/fonts/Roboto-Italic.ttf}${fontSize 25}${alignc} ${date %A} ${date %d} ${date %B} ${date %Y}${vSpace -10}${fontSize}${font}
+${alignc}${fontSize 25}${date %A} ${date %d} ${date %B} ${date %Y}${vSpace -10}${fontSize}${font}
 ${hline}${vSpace 5}
 Uptime: ${uptime}
 Android: ${android}${alignr}kernel ${kernel}
@@ -40,9 +41,7 @@ ${alignc}${fontColor color1}${fontSize 25}RAM${fontColor}${fontSize}
  ${mem_used }/${mem_total} ${mem_percent}%
 ${mem_bar}
 ${alignc}${fontColor color1}${fontSize 25}STORAGE${fontColor}${fontSize}
- int: ${fs_used /sdcard}/${fs_size /sdcard} ${fs_perc /sdcard}%
-${fs_bar /sdcard}
- sd: ${fs_used /storage/8688-D704}${fs_size /storage/8688-D704} ${fs_perc /storage/8688-D704}%
-${fs_bar /storage/8688-D704}
+ int: ${fs_used}/${fs_size} ${fs_perc}%
+${fs_bar}
 ${alignc}${fontColor color1}${fontSize 25}WIFI${fontColor}${fontSize}
  ${ssid}${alignr}${wifi_ip}

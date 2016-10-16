@@ -1,0 +1,33 @@
+width 435
+height 200
+
+fontSize 22
+fontOutSize 2
+
+fontShadowColor #0e1217
+fontShadowBlur 5
+fontShadowX 2
+fontShadowY 2
+
+fontOutColor #000000
+fontColor #ffffff
+
+xOffsetRight 6
+xOffsetLeft 6
+#bgColor red
+
+#font /system/fonts/DroidSans-Bold.ttf
+
+vSpace 0
+color1 #00FFEC
+
+topTime 3
+
+TEXT
+${fontColor color1}${fontSize 23}Top process:${fontColor}${fontSize}
+${fontColor color1}Name${alignc}Cpu${alignr}Ram${fontColor}
+${topMem shortName 0} ${alignc}${topMem cpu 0}${alignr}${topMem mem 0}
+${topMem shortName 1} ${alignc}${topMem cpu 1}${alignr}${topMem mem 1}
+${topMem shortName 2} ${alignc}${topMem cpu 2}${alignr}${topMem mem 2}
+${topMem shortName 3} ${alignc}${topMem cpu 3}${alignr}${topMem mem 3}
+${topMem shortName 4} ${alignc}${topMem cpu 4}${alignr}${topMem mem 4}

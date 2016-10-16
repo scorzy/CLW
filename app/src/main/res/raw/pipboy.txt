@@ -1,0 +1,39 @@
+width 700
+height 400
+
+fontSize 40
+fontOutSize 0
+
+fontShadowColor #441AFF80
+fontShadowBlur 5
+fontShadowX 0
+fontShadowY 0
+
+fontOutColor #441AFF80
+fontColor #DD1AFF80
+
+xOffsetRight 6
+xOffsetLeft 6
+#bgColor red
+
+# get the font from:
+# http://www.dafont.com/monofonto.font
+#disabled for compatibility
+#font /sdcard/monofonto.ttf
+
+vSpace 0
+color1 #ffa029
+
+future 60
+calendars_ids 10
+topTime 0
+lineWidth 2
+
+TEXT
+${hline}${vSpace 10}
+--${alignc}${date %A} ${date %d} ${date %B} ${date %Y}${vSpace -10}${alignr}--
+${hline}${vSpace 5}
+>  UPTIME ${uptime}
+>  BATTERY ${battery_percent}%
+>  RAM ${mem_percent}%
+>  /SDCARD/ ${fs_used}/${fs_size}

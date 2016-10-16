@@ -32,12 +32,11 @@
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
         android:adjustViewBounds="true"
-        android:background="@android:color/holo_blue_light"
-        android:scaleType="centerCrop"
+        android:scaleType="centerInside"
         app:srcCompat="@drawable/example_img" />
 
 </LinearLayout>

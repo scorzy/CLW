@@ -1,0 +1,39 @@
+width 435
+height 430
+
+fontSize 19
+fontOutSize 5
+
+fontShadowColor #70000000
+fontShadowBlur 8
+fontShadowX 2
+fontShadowY 2
+
+fontOutColor #000000
+fontColor #ffffff
+
+xOffsetRight 6
+xOffsetLeft 6
+#bgColor red
+
+#font /system/fonts/DroidSans-Bold.ttf
+
+vSpace 0
+color1 #00B800
+
+# max day ahead
+future 60
+# calendar id
+# use CLW app to see corresponding calendar name
+calendars_ids 1 2 3 4 5 6 7 8 9 10
+
+lineWidth 4
+
+TEXT
+${fontColor color1}${fontSize 22}AGENDA${hline} ${fontColor} ${fontSize}
+${agenda dt_start_custom 0 d MMM E} ${agenda dt_start_hm 0}-${agenda dt_end_hm 0} ${agenda title 0}
+${agenda dt_start_custom 1 d MMM E} ${agenda dt_start_hm 1}-${agenda dt_end_hm 1} ${agenda title 1}
+${agenda dt_start_custom 2 d MMM E} ${agenda dt_start_hm 2}-${agenda dt_end_hm 2} ${agenda title 2}
+${agenda dt_start_custom 3 d MMM E} ${agenda dt_start_hm 3}-${agenda dt_end_hm 3} ${agenda title 3}
+${agenda dt_start_custom 4 d MMM E} ${agenda dt_start_hm 4}-${agenda dt_end_hm 4} ${agenda title 4}
+${agenda dt_start_custom 5 d MMM E} ${agenda dt_start_hm 5}-${agenda dt_end_hm 5} ${agenda title 5}

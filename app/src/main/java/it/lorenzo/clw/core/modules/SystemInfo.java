@@ -27,7 +27,6 @@ import java.io.RandomAccessFile;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import it.lorenzo.clw.core.Core;
 import it.lorenzo.clw.core.modules.Utility.BarDrawer;
 import it.lorenzo.clw.core.modules.Utility.CommonUtility;
 
@@ -84,7 +83,7 @@ public class SystemInfo extends AbstractMobule {
     }
 
     @Override
-    public String getString(String key, String[] params) {
+    public String getString(String key, String[] params, Context context) {
         try {
 
             switch (key) {
@@ -98,31 +97,31 @@ public class SystemInfo extends AbstractMobule {
                                 + getCpuCurrentFreq(Integer.parseInt(params[0]), "");
                     break;
                 case BATTERY_PERCENT:
-                    return "" + getBatteryLevel();
+                    return "" + getBatteryLevel(context);
                 case BATTERY_CHARGING:
-                    return isConnected() ? "connected" : "not connected";
+                    return isConnected(context) ? "connected" : "not connected";
                 case UPTIME:
                     return getUptime();
                 case MEM_PERCENT:
-                    return "" + getMemPercent();
+                    return "" + getMemPercent(context);
                 case MEM_FREE:
-                    return CommonUtility.convert(getFreeeMemory());
+                    return CommonUtility.convert(getFreeeMemory(context));
                 case MEM_USED:
-                    return CommonUtility.convert(getTotalMemory() - getFreeeMemory());
+                    return CommonUtility.convert(getTotalMemory() - getFreeeMemory(context));
                 case MEM_TOTAL:
                     return CommonUtility.convert(getTotalMemory());
                 case FS_FREE:
-                    return CommonUtility.convert(getFreeSpace(params));
+                    return CommonUtility.convert(getFreeSpace(params, context));
                 case FS_USED:
-                    return CommonUtility.convert(getUsedSpace(params));
+                    return CommonUtility.convert(getUsedSpace(params, context));
                 case FS_SIZE:
-                    return CommonUtility.convert(getTotalSpace(params));
+                    return CommonUtility.convert(getTotalSpace(params, context));
                 case FS_PERCENT:
-                    return "" + getFsPercent(params);
+                    return "" + getFsPercent(params, context);
                 case SSID:
-                    return getSsid();
+                    return getSsid(context);
                 case WIFI_IP:
-                    return this.getWiFiIp();
+                    return this.getWiFiIp(context);
             }
 
         } catch (Exception e) {
@@ -133,12 +132,12 @@ public class SystemInfo extends AbstractMobule {
     }
 
     @Override
-    public void inizialize() {
+    public void inizialize(Context context) {
 
     }
 
     @Override
-    public Bitmap GetBmp(String key, String[] params, int maxWidth) {
+    public Bitmap GetBmp(String key, String[] params, int maxWidth, Context context) {
         try {
             int start = 0;
             if (key.equals(FS_BAR))
@@ -159,13 +158,13 @@ public class SystemInfo extends AbstractMobule {
             switch (key) {
                 case BATTERY_BAR:
                     return BarDrawer.getBar(width, height, txtMan,
-                            getBatteryLevel());
+                            getBatteryLevel(context));
                 case MEM_BAR:
                     return BarDrawer.getBar(width, height, txtMan,
-                            getMemPercent());
+                            getMemPercent(context));
                 case FS_BAR:
                     return BarDrawer.getBar(width, height, txtMan,
-                            getFsPercent(params));
+                            getFsPercent(params, context));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -174,13 +173,11 @@ public class SystemInfo extends AbstractMobule {
     }
 
     @Override
-    public void changeSetting(String key, String[] params) {
+    public void changeSetting(String key, String[] params, Context context) {
     }
 
-    private int getBatteryLevel() {
-        Intent batteryIntent = Core
-                .getInstance()
-                .getContext()
+    private int getBatteryLevel(Context context) {
+        Intent batteryIntent = context
                 .registerReceiver(null,
                         new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
         int level = batteryIntent.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
@@ -193,10 +190,8 @@ public class SystemInfo extends AbstractMobule {
         return (int) (((float) level / (float) scale) * 100.0f);
     }
 
-    private boolean isConnected() {
-        Intent intent = Core
-                .getInstance()
-                .getContext()
+    private boolean isConnected(Context context) {
+        Intent intent = context
                 .registerReceiver(null,
                         new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
         int plugged = intent.getIntExtra(BatteryManager.EXTRA_PLUGGED, -1);
@@ -232,15 +227,13 @@ public class SystemInfo extends AbstractMobule {
 
     // RAM ------------------------------------------------------------
 
-    private int getMemPercent() {
-        return 100 - (int) (100 * getFreeeMemory() / getTotalMemory());
+    private int getMemPercent(Context context) {
+        return 100 - (int) (100 * getFreeeMemory(context) / getTotalMemory());
     }
 
-    private long getFreeeMemory() {
+    private long getFreeeMemory(Context context) {
         MemoryInfo mi = new MemoryInfo();
-        Core.getInstance().getContext();
-        ActivityManager activityManager = (ActivityManager) Core.getInstance()
-                .getContext().getSystemService(Context.ACTIVITY_SERVICE);
+        ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
         activityManager.getMemoryInfo(mi);
         return mi.availMem;
     }
@@ -274,9 +267,9 @@ public class SystemInfo extends AbstractMobule {
 
     // STORAGE ------------------------------------------------------------
 
-    private String getInternalStorage() {
+    private String getInternalStorage(Context context) {
         File storage;
-        storage = Core.getInstance().getContext().getFilesDir();
+        storage = context.getFilesDir();
         if (storage.exists())
             return storage.getAbsolutePath();
         else
@@ -284,48 +277,46 @@ public class SystemInfo extends AbstractMobule {
         return storage.getAbsolutePath();
     }
 
-    private long getTotalSpace(String[] params) {
+    private long getTotalSpace(String[] params, Context context) {
         String path;
         if (params != null && params.length > 0) {
             path = params[0];
         } else
-            path = getInternalStorage();
+            path = getInternalStorage(context);
 
         StatFs statFs = new StatFs(path);
         return (long) statFs.getBlockCount() * (long) statFs.getBlockSize();
     }
 
-    private long getFreeSpace(String[] params) {
+    private long getFreeSpace(String[] params, Context context) {
         String path;
         if (params != null && params.length > 0) {
             path = params[0];
         } else
-            path = getInternalStorage();
+            path = getInternalStorage(context);
         StatFs statFs = new StatFs(path);
         return (long) statFs.getAvailableBlocks()
                 * (long) statFs.getBlockSize();
     }
 
-    private long getUsedSpace(String[] params) {
-        return getTotalSpace(params) - getFreeSpace(params);
+    private long getUsedSpace(String[] params, Context context) {
+        return getTotalSpace(params, context) - getFreeSpace(params, context);
     }
 
-    private int getFsPercent(String[] params) {
-        return 100 - (int) (100 * getFreeSpace(params) / getTotalSpace(params));
+    private int getFsPercent(String[] params, Context context) {
+        return 100 - (int) (100 * getFreeSpace(params, context) / getTotalSpace(params, context));
     }
 
     // WIFI ------------------------------------------------------------
 
-    private String getSsid() {
-        ConnectivityManager connManager = (ConnectivityManager) Core
-                .getInstance().getContext()
+    private String getSsid(Context context) {
+        ConnectivityManager connManager = (ConnectivityManager) context
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connManager
                 .getNetworkInfo(ConnectivityManager.TYPE_WIFI);
         String ssid;
         if (networkInfo.isConnected()) {
-            final WifiManager wifiManager = (WifiManager) Core.getInstance()
-                    .getContext().getSystemService(Context.WIFI_SERVICE);
+            final WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
             final WifiInfo connectionInfo = wifiManager.getConnectionInfo();
             if (connectionInfo != null
                     && !TextUtils.isEmpty(connectionInfo.getSSID())) {
@@ -337,16 +328,14 @@ public class SystemInfo extends AbstractMobule {
         return "";
     }
 
-    private String getWiFiIp() {
-        ConnectivityManager connManager = (ConnectivityManager) Core
-                .getInstance().getContext()
+    private String getWiFiIp(Context context) {
+        ConnectivityManager connManager = (ConnectivityManager) context
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connManager
                 .getNetworkInfo(ConnectivityManager.TYPE_WIFI);
         String ip;
         if (networkInfo.isConnected()) {
-            final WifiManager wifiManager = (WifiManager) Core.getInstance()
-                    .getContext().getSystemService(Context.WIFI_SERVICE);
+            final WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
             final WifiInfo connectionInfo = wifiManager.getConnectionInfo();
             if (connectionInfo != null
                     && !TextUtils.isEmpty(connectionInfo.getSSID())) {

@@ -1,3 +1,7 @@
+# This is a comment
+# for info:
+# https://github.com/scorzy/CLW/wiki
+
 width 440
 height 480
 
@@ -24,6 +28,8 @@ color1 #4497FF
 lineWidth 3
 
 TEXT
+${alignc}Hello World !
+
 ${alignc}Normal text
 ${alignc}${fontOutSize 6}Outline text${fontOutSize}
 ${alignc}${fontShadowBlur 2}Shadow text

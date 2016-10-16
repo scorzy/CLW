@@ -6,8 +6,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
@@ -25,7 +27,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import java.io.File;
+
 import it.lorenzo.clw.R;
+import it.lorenzo.clw.chooser.Example;
 
 /**
  * A {@link PreferenceActivity} that presents a set of application settings. On
@@ -123,6 +128,33 @@ public class SettingsActivity extends PreferenceActivity implements Preference.O
                 }
             });
         }
+
+        Preference textView = getPreferenceManager().findPreference("example_key");
+        if (textView != null) {
+            File clwDir = new File(Environment.getExternalStorageDirectory(), "CLW-examples");
+            textView.setSummary(clwDir.getAbsolutePath());
+            final Context context = this;
+            textView.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference arg0) {
+                    Example.createExamples(context);
+                    openFolder();
+                    return true;
+                }
+            });
+        }
+    }
+
+    public void openFolder() {
+        File clwDir = new File(Environment.getExternalStorageDirectory(), "CLW-examples");
+        Uri selectedUri = Uri.fromFile(clwDir);
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setDataAndType(selectedUri, "resource/folder");
+        if (intent.resolveActivityInfo(getPackageManager(), 0) != null) {
+            startActivity(intent);
+        } else {
+            Toast.makeText(this, "Please install a File Manager.", Toast.LENGTH_LONG).show();
+        }
     }
 
     public ActionBar getSupportActionBar() {
@@ -163,7 +195,6 @@ public class SettingsActivity extends PreferenceActivity implements Preference.O
 
                     Toast.makeText(this, "Please grant permission.", Toast.LENGTH_SHORT).show();
                 }
-                return;
             }
         }
     }

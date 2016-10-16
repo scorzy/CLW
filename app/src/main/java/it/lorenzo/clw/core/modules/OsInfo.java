@@ -1,5 +1,6 @@
 package it.lorenzo.clw.core.modules;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Build;
 
@@ -34,12 +35,12 @@ public class OsInfo extends AbstractMobule {
 
 
     @Override
-    public void inizialize() {
+    public void inizialize(Context context) {
 
     }
 
     @Override
-    public String getString(String key, String[] params) {
+    public String getString(String key, String[] params, Context context) {
         switch (key) {
             case KERNEL:
                 return System.getProperty("os.version");
@@ -70,11 +71,11 @@ public class OsInfo extends AbstractMobule {
 
 
     @Override
-    public void changeSetting(String key, String[] params) {
+    public void changeSetting(String key, String[] params, Context context) {
     }
 
     @Override
-    public Bitmap GetBmp(String key, String[] params, int maxWidth) {
+    public Bitmap GetBmp(String key, String[] params, int maxWidth, Context context) {
         return null;
     }
 
