@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.provider.CalendarContract;
 import android.provider.CalendarContract.Calendars;
 
@@ -17,7 +18,7 @@ import java.util.Locale;
 /**
  * Created by lorenzo on 24/03/15.
  */
-public class Agenda extends AbstractMobule {
+public class Agenda extends AbstractModule {
 
 	public static final String[] EVENTS = new String[]{
 			Calendars._ID,                            // 0
@@ -53,7 +54,6 @@ public class Agenda extends AbstractMobule {
 
 	public static final String CALENDARSIDS = "calendars_ids";
 
-	// The indices for the projection array above.
 	private int future = 28;
 	private String calendarQuery;
 	private Cursor cursor;
@@ -78,7 +78,14 @@ public class Agenda extends AbstractMobule {
 				start.setTimeInMillis(Long.parseLong(cursor.getString(3)));
 				GregorianCalendar end = new GregorianCalendar();
 				end.setTimeInMillis(Long.parseLong(cursor.getString(4)));
-				Locale current = context.getResources().getConfiguration().locale;
+
+				Locale current;
+				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+					current = context.getResources().getConfiguration().getLocales().get(0);
+				} else {
+					current = context.getResources().getConfiguration().locale;
+				}
+
 				SimpleDateFormat dayShort = new SimpleDateFormat("E", current);
 				SimpleDateFormat dayLong = new SimpleDateFormat("EEEE", current);
 
@@ -87,7 +94,7 @@ public class Agenda extends AbstractMobule {
 					custom += params[i] + " ";
 				}
 
-				SimpleDateFormat sdf = new SimpleDateFormat("HH:mm"); //like "HH:mm" or just "mm", whatever you want
+				SimpleDateFormat sdf = new SimpleDateFormat("HH:mm", current);
 
 				switch (params[0]) {
 					case TITLE:
@@ -129,7 +136,6 @@ public class Agenda extends AbstractMobule {
 						if (!allDay)
 							return sdf.format(end.getTime());
 				}
-
 			}
 		}
 		return "";
@@ -145,7 +151,7 @@ public class Agenda extends AbstractMobule {
 	}
 
 	@Override
-	public void inizialize(Context context) {
+	public void initialize(Context context) {
 		if (!calendarQuery.isEmpty()) {
 			readCalendarEvent(context);
 		}

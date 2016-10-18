@@ -28,7 +28,6 @@ public class TextManager implements Module {
 	public static final String COLORX = "color";
 	public static final String LINEWIDTH = "lineWidth";
 
-	private Paint paint;
 	private int textColor;
 	private int strokeColor;
 	private float textSize;
@@ -52,39 +51,11 @@ public class TextManager implements Module {
 	private float currentLineWidth;
 
 	public TextManager() {
-		textColor = Color.WHITE;
-		strokeColor = Color.BLACK;
-		currentTextColor = Color.WHITE;
-		currentStrokeColor = Color.BLACK;
-
-		shadowColor = Color.BLACK;
-		shadowX = 0;
-		shadowY = 0;
-		shadowBlur = 0;
-
-		currentShadowColor = Color.BLACK;
-		currentShadowX = 0;
-		currentShadowY = 0;
-		currentShadowBlur = 0;
-
-		tf = Typeface.MONOSPACE;
-
-		paint = new Paint();
-		paint.setAntiAlias(true);
-		paint.setTypeface(Typeface.MONOSPACE);
-		paint.setTextSize(20);
-
-		colors = new int[10];
-
-		lineWidth = -1;
-		currentLineWidth = -1;
 	}
 
 	public void drawText(String text, Canvas canvas, float x, float y) {
-		paint.setTypeface(currentTf);
-		paint.setTextSize(currentTextSize);
 
-		paint = getStrokePaint();
+		Paint paint = getStrokePaint();
 		if (currentStrokeWidth != 0) {
 			paint.setColor(currentStrokeColor);
 			paint.setStyle(Style.STROKE);
@@ -138,17 +109,14 @@ public class TextManager implements Module {
 	}
 
 	public Rect getBounds(String text) {
-		//Log.i("text", text + "/end");
 		Paint paint = getStrokePaint();
 		paint.setStyle(Style.STROKE);
 		FontMetricsInt metrics = paint.getFontMetricsInt();
-		//Log.i("mesurtxt", "" + (int) paint.measureText(text));
 		return new Rect(0, 0, (int) paint.measureText(text) + getBoundsMarginX(), metrics.descent
 				- metrics.ascent + metrics.leading);
 	}
 
 	public int getBoundsMarginX() {
-		//Log.i("shadow", currentShadowX + " " + currentStrokeWidth);
 		return Math.max((int) currentShadowX, (int) currentStrokeWidth);
 	}
 
@@ -179,15 +147,12 @@ public class TextManager implements Module {
 		switch (key) {
 			case FONT_SIZE:
 				if (scope == 0) {
-					paint.setTextSize(Float.parseFloat(value));
 					textSize = Float.parseFloat(value);
 					currentTextSize = textSize;
 				} else if (scope == 1) {
-					paint.setTextSize(Float.parseFloat(value));
 					currentTextSize = Float.parseFloat(value);
 				} else if (scope == 2) {
 					currentTextSize = textSize;
-					paint.setTextSize(textSize);
 				}
 				break;
 			case FONT_COLOR:
@@ -212,15 +177,12 @@ public class TextManager implements Module {
 				break;
 			case FONT_OUTLINE_SIZE:
 				if (scope == 0) {
-					paint.setStrokeWidth(Float.parseFloat(value));
 					strokeWidth = Float.parseFloat(value);
 					currentStrokeWidth = strokeWidth;
 				} else if (scope == 1) {
 					currentStrokeWidth = Float.parseFloat(value);
-					paint.setStrokeWidth(Float.parseFloat(value));
 				} else if (scope == 2) {
 					currentStrokeWidth = strokeWidth;
-					paint.setStrokeWidth(strokeWidth);
 				}
 				break;
 			case FONT_SHADOW_COLOR:
@@ -302,9 +264,6 @@ public class TextManager implements Module {
 				currentTextColor = textColor;
 			}
 		}
-		// shadow
-		paint.setShadowLayer(currentShadowBlur, currentShadowX, currentShadowY,
-				currentShadowColor);
 	}
 
 	@Override
@@ -320,8 +279,7 @@ public class TextManager implements Module {
 
 	@Override
 	public String getString(String key, String[] params, Context context) {
-		// TODO Auto-generated method stub
-		return null;
+		return "";
 	}
 
 	@Override
@@ -337,7 +295,7 @@ public class TextManager implements Module {
 	}
 
 	@Override
-	public void inizialize(Context context) {
+	public void initialize(Context context) {
 
 		textSize = 20;
 		strokeWidth = 0;
@@ -359,13 +317,6 @@ public class TextManager implements Module {
 
 		tf = Typeface.MONOSPACE;
 		currentTf = tf;
-
-		paint = new Paint();
-		paint.setAntiAlias(true);
-		paint.setTypeface(Typeface.MONOSPACE);
-		paint.setTextSize(20);
-		paint.setAntiAlias(true);
-		paint.setStyle(Style.FILL);
 
 		colors = new int[10];
 

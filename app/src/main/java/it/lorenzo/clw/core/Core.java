@@ -90,7 +90,7 @@ public class Core {
 		maxHeight = 0;
 
 		for (Module module : modules)
-			module.inizialize(context);
+			module.initialize(context);
 
 		readConfigFile(path);
 
@@ -164,11 +164,9 @@ public class Core {
 				String key = "";
 				current++;
 				String[] params = null;
-				//Log.i("curr","" + line.charAt(current));
 				if (line.charAt(current) == '{') {
 					int last = line.indexOf("}", current);
 					String stuff = line.substring(current + 1, last);
-					//Log.i("stuff","" + stuff);
 					int endKey = stuff.indexOf(" ");
 					if (endKey == -1) {
 						key = stuff;
@@ -176,7 +174,6 @@ public class Core {
 						key = stuff.substring(0, stuff.indexOf(" "));
 						params = (stuff.substring(key.length() + 1)).split(" ");
 					}
-					//Log.i("key",key);
 					current = last + 1;
 				}
 
@@ -195,14 +192,17 @@ public class Core {
 						txtMan.drawLine(c, currentX, y + height);
 						break;
 					case VSPACE:
-						vSpace = Integer.parseInt(params[params.length - 1]);
+						if (params != null && params.length > 0)
+							vSpace = Integer.parseInt(params[params.length - 1]);
 						break;
 					case XOFFLEFT:
-						this.xOffsetLeft = Integer.parseInt(params[params.length - 1]);
+						if (params != null && params.length > 0)
+							xOffsetLeft = Integer.parseInt(params[params.length - 1]);
 						currentX = xOffsetLeft;
 						break;
 					case XOFFRIGHT:
-						this.xOffsetRight = Integer.parseInt(params[params.length - 1]);
+						if (params != null && params.length > 0)
+							xOffsetRight = Integer.parseInt(params[params.length - 1]);
 						break;
 					default:
 						// altro;

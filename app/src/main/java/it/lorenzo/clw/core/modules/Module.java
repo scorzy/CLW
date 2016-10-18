@@ -17,7 +17,7 @@ public interface Module {
 
     Bitmap GetBmp(String key, String[] params, int maxWidth, Context context);
 
-    void inizialize(Context context);
+    void initialize(Context context);
 
     void setDefaults(String elements[]);
 

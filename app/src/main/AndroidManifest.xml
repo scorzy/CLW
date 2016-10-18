@@ -54,7 +54,7 @@
         <activity
             android:name=".gui.CalendarIDS"
             android:label="@string/title_activity_calendar_ids"></activity>
-        <activity android:name=".chooser.exampleselector"></activity>
+        <activity android:name=".chooser.ExampleSelector"></activity>
     </application>
 
 </manifest>
