@@ -5,7 +5,8 @@ package it.lorenzo.clw.core.modules;
  */
 
 import android.content.Context;
-import android.graphics.Bitmap;
+
+import it.lorenzo.clw.core.modules.Utility.BitmapWithPosition;
 
 public interface Module {
 
@@ -15,7 +16,7 @@ public interface Module {
 
     void changeSetting(String key, String[] params, Context context);
 
-    Bitmap GetBmp(String key, String[] params, int maxWidth, Context context);
+    BitmapWithPosition GetBmp(String key, String[] params, int maxWidth, Context context);
 
     void initialize(Context context);
 

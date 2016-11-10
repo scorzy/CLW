@@ -5,7 +5,6 @@ package it.lorenzo.clw.core.modules;
  */
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -13,6 +12,8 @@ import android.graphics.Paint.FontMetricsInt;
 import android.graphics.Paint.Style;
 import android.graphics.Rect;
 import android.graphics.Typeface;
+
+import it.lorenzo.clw.core.modules.Utility.BitmapWithPosition;
 
 public class TextManager implements Module {
 
@@ -325,7 +326,7 @@ public class TextManager implements Module {
 	}
 
 	@Override
-	public Bitmap GetBmp(String key, String[] params, int maxWidth, Context context) {
+	public BitmapWithPosition GetBmp(String key, String[] params, int maxWidth, Context context) {
 		return null;
 	}
 

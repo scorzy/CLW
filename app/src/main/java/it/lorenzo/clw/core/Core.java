@@ -19,12 +19,14 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 import it.lorenzo.clw.core.modules.Agenda;
+import it.lorenzo.clw.core.modules.Image;
 import it.lorenzo.clw.core.modules.Module;
 import it.lorenzo.clw.core.modules.OsInfo;
 import it.lorenzo.clw.core.modules.SystemInfo;
 import it.lorenzo.clw.core.modules.TextManager;
 import it.lorenzo.clw.core.modules.TopCpu;
 import it.lorenzo.clw.core.modules.TopMem;
+import it.lorenzo.clw.core.modules.Utility.BitmapWithPosition;
 
 public class Core {
 
@@ -45,8 +47,8 @@ public class Core {
 	private Canvas c;
 	private ArrayList<Module> modules;
 	private TextManager txtMan;
-	private ArrayList<Pair<Bitmap, Integer>> drawCenter;
-	private ArrayList<Pair<Bitmap, Integer>> drawRight;
+	private ArrayList<Pair<BitmapWithPosition, Integer>> drawCenter;
+	private ArrayList<Pair<BitmapWithPosition, Integer>> drawRight;
 	private int centerLenght;
 	private int rightLenght;
 	private int bgColor = 0;
@@ -72,6 +74,7 @@ public class Core {
 		modules.add(new TopCpu());
 		modules.add(new TopMem());
 		modules.add(new Agenda());
+		modules.add(new Image());
 		drawCenter = new ArrayList<>();
 		drawRight = new ArrayList<>();
 	}
@@ -131,10 +134,10 @@ public class Core {
 				Canvas c2 = new Canvas(bmp2);
 				txtMan.drawText(toPrint, c2, txtMan.getBoundsMarginX() / 2, bounds.height());
 				if (allign == 1) {
-					drawCenter.add(new Pair<>(bmp2, 0));
+					drawCenter.add(new Pair<>(new BitmapWithPosition(bmp2), 0));
 					centerLenght += bmp2.getWidth();
 				} else {
-					drawRight.add(new Pair<>(bmp2, 0));
+					drawRight.add(new Pair<>(new BitmapWithPosition(bmp2), 0));
 					rightLenght += bmp2.getWidth();
 				}
 			} else
@@ -214,40 +217,38 @@ public class Core {
 								// module draw
 							} else if (module.check(key) == Module.Result.draw) {
 								printText();
-								if (allign == 0) {
-									Bitmap bitmap = module.GetBmp(key, params,
-											maxWidth - currentX, context);
-									if (bitmap != null) {
-										int newHeight = Math.max(
-												bitmap.getHeight(), height);
-										bounds = new Rect(0, 0, bitmap.getWidth(),
-												newHeight);
+								BitmapWithPosition bitmap = module.GetBmp(key, params, maxWidth - currentX, context);
+								if (!bitmap.getRelative()) {
+									c.drawBitmap(
+											bitmap.getBitmap(),
+											bitmap.getPoint().x,
+											bitmap.getPoint().y, null);
+									bounds = null;
+								} else {
+									if (allign == 0) {
+										bounds = new Rect(0, 0,
+												Math.max(bitmap.getBitmap().getWidth() + bitmap.getPoint().x, 0),
+												Math.max(bitmap.getBitmap().getHeight() + bitmap.getPoint().y, height));
 										float descent = txtMan.getStrokePaint().getFontMetrics().descent;
 										c.drawBitmap(
-												bitmap,
-												currentX,
-												y + bounds.height() + descent
-														- bitmap.getHeight(), null);
-									}
-								} else if (allign == 1) {
-									Bitmap bitmap = module.GetBmp(key, params, maxWidth - currentX, context);
-									if (bitmap != null) {
+												bitmap.getBitmap(),
+												currentX + bitmap.getPoint().x,
+												y + bounds.height() + bitmap.getPoint().y + descent
+														- bitmap.getBitmap().getHeight(), null);
+									} else if (allign == 1) {
 										int newHeight = Math.max(
-												bitmap.getHeight(), height);
+												bitmap.getBitmap().getHeight(), height);
 										drawCenter.add(new Pair<>(
-												bitmap, newHeight
-												- bitmap.getHeight()));
-										centerLenght += bitmap.getWidth();
-									}
-								} else {
-									Bitmap bitmap = module.GetBmp(key, params, maxWidth - currentX, context);
-									if (bitmap != null) {
+												bitmap, newHeight + bitmap.getPoint().y +
+												-bitmap.getBitmap().getHeight()));
+										centerLenght += bitmap.getBitmap().getWidth();
+									} else {
 										int newHeight = Math.max(
-												bitmap.getHeight(), height);
+												bitmap.getBitmap().getHeight(), height);
 										drawRight.add(new Pair<>(
-												bitmap, newHeight
-												- bitmap.getHeight()));
-										rightLenght += bitmap.getWidth();
+												bitmap, newHeight + bitmap.getPoint().y +
+												-bitmap.getBitmap().getHeight()));
+										rightLenght += bitmap.getBitmap().getWidth();
 									}
 								}
 								break;
@@ -266,21 +267,21 @@ public class Core {
 			}
 			if (!toPrint.equals("") && current >= lenght)
 				printText();
-		}
-		if (bounds != null) {
-			currentX += bounds.width();
-			height = Math.max(height, bounds.height());
+			if (bounds != null) {
+				currentX += bounds.width();
+				height = Math.max(height, bounds.height());
+			}
 		}
 
 		// draw center stuff
 		if (!drawCenter.isEmpty()) {
 			int sum = 0;
-			for (Pair<Bitmap, Integer> pair : drawCenter) {
-				Bitmap toDraw = pair.first;
-				//Log.i("asd", "" + maxWidth + " " + centerLenght + " " + sum);
+			for (Pair<BitmapWithPosition, Integer> pair : drawCenter) {
+				BitmapWithPosition toDraw = pair.first;
 				int pos = ((maxWidth - centerLenght) / 2) + sum;
-				c.drawBitmap(toDraw, pos, y + pair.second, null);
-				sum += toDraw.getWidth();
+				c.drawBitmap(toDraw.getBitmap(), pos + toDraw.getPoint().x, y
+						+ pair.second + toDraw.getPoint().y, null);
+				sum += toDraw.getBitmap().getWidth() + toDraw.getPoint().x;
 			}
 		}
 		drawCenter.clear();
@@ -288,11 +289,11 @@ public class Core {
 		//draw right stuff
 		if (!drawRight.isEmpty()) {
 			int sum = 0;
-			for (Pair<Bitmap, Integer> pair : drawRight) {
-				Bitmap toDraw = pair.first;
-				c.drawBitmap(toDraw, maxWidth - xOffsetRight - rightLenght + sum, y
-						+ pair.second, null);
-				sum += toDraw.getWidth();
+			for (Pair<BitmapWithPosition, Integer> pair : drawRight) {
+				BitmapWithPosition toDraw = pair.first;
+				c.drawBitmap(toDraw.getBitmap(), maxWidth - xOffsetRight - rightLenght + sum + toDraw.getPoint().x, y
+						+ pair.second + toDraw.getPoint().y, null);
+				sum += toDraw.getBitmap().getWidth() + toDraw.getPoint().x;
 			}
 		}
 		drawRight.clear();
@@ -322,8 +323,6 @@ public class Core {
 						}
 					}
 				//if (!done)
-
-
 			}
 		}
 		// text

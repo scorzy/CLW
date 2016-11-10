@@ -1,9 +1,9 @@
 package it.lorenzo.clw.core.modules;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.os.Build;
 
+import it.lorenzo.clw.core.modules.Utility.BitmapWithPosition;
 import it.lorenzo.clw.core.modules.Utility.CommonUtility;
 
 /**
@@ -74,7 +74,7 @@ public class OsInfo extends AbstractModule {
 	}
 
 	@Override
-	public Bitmap GetBmp(String key, String[] params, int maxWidth, Context context) {
+	public BitmapWithPosition GetBmp(String key, String[] params, int maxWidth, Context context) {
 		return null;
 	}
 

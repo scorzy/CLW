@@ -1,6 +1,10 @@
 package it.lorenzo.clw.core.modules;
 
+import android.content.Context;
+
 import java.util.HashMap;
+
+import it.lorenzo.clw.core.modules.Utility.BitmapWithPosition;
 
 /**
  * Created by lorenzo on 21/02/15.
@@ -23,5 +27,10 @@ public abstract class AbstractModule implements Module {
 		if (res == null)
 			return Result.no;
 		return res;
+	}
+
+	@Override
+	public BitmapWithPosition GetBmp(String key, String[] params, int maxWidth, Context context) {
+		return null;
 	}
 }

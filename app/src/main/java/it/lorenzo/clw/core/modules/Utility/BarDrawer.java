@@ -14,8 +14,8 @@ import it.lorenzo.clw.core.modules.TextManager;
 
 public class BarDrawer {
 
-	static public Bitmap getBar(int width, int height, TextManager txtMan,
-								int percent) {
+	static public BitmapWithPosition getBar(int width, int height, TextManager txtMan,
+											int percent) {
 		Paint fillPaint = txtMan.getFillPaint();
 		Paint.FontMetrics fontMetrics = fillPaint.getFontMetrics();
 		float descent = fontMetrics.descent;
@@ -47,6 +47,6 @@ public class BarDrawer {
 		fillPaint.setStyle(Paint.Style.STROKE);
 		c.drawRect(x1, y1, x2, y2, fillPaint);
 
-		return bmp;
+		return new BitmapWithPosition(bmp);
 	}
 }

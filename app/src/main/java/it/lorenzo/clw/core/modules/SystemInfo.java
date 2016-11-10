@@ -9,7 +9,6 @@ import android.app.ActivityManager.MemoryInfo;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiInfo;
@@ -28,6 +27,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import it.lorenzo.clw.core.modules.Utility.BarDrawer;
+import it.lorenzo.clw.core.modules.Utility.BitmapWithPosition;
 import it.lorenzo.clw.core.modules.Utility.CommonUtility;
 
 public class SystemInfo extends AbstractModule {
@@ -137,7 +137,7 @@ public class SystemInfo extends AbstractModule {
 	}
 
 	@Override
-	public Bitmap GetBmp(String key, String[] params, int maxWidth, Context context) {
+	public BitmapWithPosition GetBmp(String key, String[] params, int maxWidth, Context context) {
 		try {
 			int start = 0;
 			if (key.equals(FS_BAR))

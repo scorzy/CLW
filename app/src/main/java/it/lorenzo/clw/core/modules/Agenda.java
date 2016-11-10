@@ -3,7 +3,6 @@ package it.lorenzo.clw.core.modules;
 import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.CalendarContract;
@@ -14,6 +13,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
+
+import it.lorenzo.clw.core.modules.Utility.BitmapWithPosition;
 
 /**
  * Created by lorenzo on 24/03/15.
@@ -146,7 +147,7 @@ public class Agenda extends AbstractModule {
 	}
 
 	@Override
-	public Bitmap GetBmp(String key, String[] params, int maxWidth, Context context) {
+	public BitmapWithPosition GetBmp(String key, String[] params, int maxWidth, Context context) {
 		return null;
 	}
 
