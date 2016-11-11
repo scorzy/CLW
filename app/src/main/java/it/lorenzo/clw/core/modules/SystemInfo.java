@@ -26,7 +26,7 @@ import java.io.RandomAccessFile;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import it.lorenzo.clw.core.modules.Utility.BarDrawer;
+import it.lorenzo.clw.core.Core;
 import it.lorenzo.clw.core.modules.Utility.BitmapWithPosition;
 import it.lorenzo.clw.core.modules.Utility.CommonUtility;
 
@@ -57,10 +57,10 @@ public class SystemInfo extends AbstractModule {
 	public final static String SSID = "ssid";
 	public final static String WIFI_IP = "wifi_ip";
 
-	private TextManager txtMan;
+	private Core core;
 	private long maxRam;
 
-	public SystemInfo(TextManager txtMan) {
+	public SystemInfo(Core core) {
 		keys.put(CPU_FREQ, Result.string);
 		keys.put(BATTERY_PERCENT, Result.string);
 		keys.put(BATTERY_CHARGING, Result.string);
@@ -78,7 +78,7 @@ public class SystemInfo extends AbstractModule {
 		keys.put(FS_BAR, Result.draw);
 		keys.put(SSID, Result.string);
 		keys.put(WIFI_IP, Result.string);
-		this.txtMan = txtMan;
+		this.core = core;
 		maxRam = -1;
 	}
 
@@ -143,28 +143,26 @@ public class SystemInfo extends AbstractModule {
 			if (key.equals(FS_BAR))
 				start = 1;
 
-			int width;
+			int width = 0;
 			int height = 0;
 			if (params != null && params.length > start) {
 				height = Integer.parseInt(params[start]);
 			}
 			if (params != null && params.length > 1 + start) {
 				width = Integer.parseInt(params[1 + start]);
-			} else if (maxWidth > 0)
-				width = maxWidth;
-			else
-				return null;
+			}
+
 
 			switch (key) {
 				case BATTERY_BAR:
-					return BarDrawer.getBar(width, height, txtMan,
-							getBatteryLevel(context));
+					return core.getBarDrawer().getBar(width, height,
+							getBatteryLevel(context), maxWidth);
 				case MEM_BAR:
-					return BarDrawer.getBar(width, height, txtMan,
-							getMemPercent(context));
+					return core.getBarDrawer().getBar(width, height,
+							getMemPercent(context), maxWidth);
 				case FS_BAR:
-					return BarDrawer.getBar(width, height, txtMan,
-							getFsPercent(params, context));
+					return core.getBarDrawer().getBar(width, height,
+							getFsPercent(params, context), maxWidth);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

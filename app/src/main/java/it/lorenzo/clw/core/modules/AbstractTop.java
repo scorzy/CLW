@@ -99,9 +99,9 @@ public abstract class AbstractTop extends AbstractModule {
 	}
 
 	@Override
-	public void setDefaults(String elements[]) {
-		if (elements[0].equals(TOPTIME)) {
-			topTime = Integer.parseInt(elements[1]);
+	public void setDefaults(String key, String[] params, Context context) {
+		if (key.equals(TOPTIME)) {
+			topTime = Integer.parseInt(params[0]);
 		}
 	}
 

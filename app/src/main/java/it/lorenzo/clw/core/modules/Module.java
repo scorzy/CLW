@@ -20,7 +20,7 @@ public interface Module {
 
     void initialize(Context context);
 
-    void setDefaults(String elements[]);
+    void setDefaults(String key, String[] params, Context context);
 
     enum Result {
         no, string, draw, settings

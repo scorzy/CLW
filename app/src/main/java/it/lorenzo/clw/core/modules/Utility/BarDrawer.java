@@ -4,26 +4,113 @@ package it.lorenzo.clw.core.modules.Utility;
  * Created by lorenzo on 17/02/15.
  */
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 
+import it.lorenzo.clw.core.Core;
+import it.lorenzo.clw.core.modules.AbstractModule;
 import it.lorenzo.clw.core.modules.TextManager;
 
-public class BarDrawer {
+import static it.lorenzo.clw.core.modules.Utility.CommonUtility.executeCommand;
 
-	static public BitmapWithPosition getBar(int width, int height, TextManager txtMan,
-											int percent) {
+public class BarDrawer extends AbstractModule {
+
+	public static final String EXECBAR = "execbar";
+	public static final String BAR_HEIGHT = "bar_height";
+	public static final String BAR_WIDTH = "bar_width";
+
+	private int width;
+	private int current_width;
+
+	private int height;
+	private int current_height;
+
+	public BarDrawer() {
+		keys.put(EXECBAR, Result.draw);
+		keys.put(BAR_HEIGHT, Result.settings);
+		keys.put(BAR_WIDTH, Result.settings);
+	}
+
+	@Override
+	public void initialize(Context context) {
+		width = 0;
+		current_width = 0;
+		height = 0;
+		current_height = 0;
+	}
+
+	@Override
+	public void setDefaults(String key, String[] params, Context context) {
+		switch (key) {
+			case BAR_HEIGHT:
+				height = Integer.parseInt(params[0]);
+				current_height = height;
+				break;
+			case BAR_WIDTH:
+				width = Integer.parseInt(params[0]);
+				current_width = width;
+				break;
+		}
+	}
+
+	@Override
+	public void changeSetting(String key, String[] params, Context context) {
+		switch (key) {
+			case BAR_HEIGHT:
+				if (params != null && params.length > 0)
+					current_height = Integer.parseInt(params[params.length - 1]);
+				else
+					current_height = height;
+				break;
+			case BAR_WIDTH:
+				if (params != null && params.length > 0)
+					current_width = Integer.parseInt(params[params.length - 1]);
+				else
+					current_width = width;
+				break;
+		}
+	}
+
+	@Override
+	public BitmapWithPosition GetBmp(String key, String[] params, int maxWidth, Context context) {
+		if (key.equals(EXECBAR)) {
+			int percentage = 0;
+			try {
+				percentage = Integer.parseInt(params[0]);
+			} catch (Exception ex) {
+				percentage = Integer.parseInt(executeCommand(params).trim());
+			}
+			return getBar(0, 0, percentage, maxWidth);
+		}
+		return null;
+	}
+
+	public BitmapWithPosition getBar(int width, int height,
+									 int percent, int maxWidth) {
+		TextManager txtMan = Core.getInstance().getTxtMan();
 		Paint fillPaint = txtMan.getFillPaint();
 		Paint.FontMetrics fontMetrics = fillPaint.getFontMetrics();
 		float descent = fontMetrics.descent;
+
+		if (height == 0)
+			height = current_height;
 
 		if (height == 0) {
 			Rect rect = txtMan.getBounds("T");
 			height = rect.height();
 		}
+
+		if (width == 0)
+			width = current_width;
+		if (width == 0)
+			width = maxWidth;
+
+		if (width == 0)
+			return null;
 
 		Bitmap bmp = Bitmap
 				.createBitmap(width, height, Bitmap.Config.ARGB_8888);

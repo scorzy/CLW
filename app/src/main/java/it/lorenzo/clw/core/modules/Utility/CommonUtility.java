@@ -58,6 +58,10 @@ public class CommonUtility {
 		}
 	}
 
+	public static String executeCommand(String[] stuff) {
+		return executeCommand("", stuff);
+	}
+
 	public static String executeCommand(String command, String[] arguments) {
 		String complete = command;
 		for (String arg : arguments) {
@@ -89,7 +93,6 @@ public class CommonUtility {
 
 	public static ArrayList<String> executeCommandToArray(String command) {
 		try {
-
 			Process process = Runtime.getRuntime().exec(command);
 			BufferedReader reader = new BufferedReader(
 					new InputStreamReader(process.getInputStream()));

@@ -129,9 +129,8 @@ public class TextManager implements Module {
 		parse(key, "", 2);
 	}
 
-	public void setDefaults(String[] elements) {
-		String key = elements[0];
-		String value = elements[elements.length - 1];
+	public void setDefaults(String key, String[] params, Context context) {
+		String value = params[params.length - 1];
 		parse(key, value, 0);
 	}
 

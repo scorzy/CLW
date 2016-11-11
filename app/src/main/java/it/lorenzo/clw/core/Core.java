@@ -17,6 +17,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import it.lorenzo.clw.core.modules.Agenda;
 import it.lorenzo.clw.core.modules.Image;
@@ -26,6 +27,7 @@ import it.lorenzo.clw.core.modules.SystemInfo;
 import it.lorenzo.clw.core.modules.TextManager;
 import it.lorenzo.clw.core.modules.TopCpu;
 import it.lorenzo.clw.core.modules.TopMem;
+import it.lorenzo.clw.core.modules.Utility.BarDrawer;
 import it.lorenzo.clw.core.modules.Utility.BitmapWithPosition;
 
 public class Core {
@@ -64,12 +66,15 @@ public class Core {
 	private int height;
 	private int vSpace = 0;
 	private int vSpaceRestore = 0;
+	private BarDrawer barDrawer;
 
 	private Core() {
 		txtMan = new TextManager();
+		barDrawer = new BarDrawer();
 		modules = new ArrayList<>();
 		modules.add(txtMan);
-		modules.add(new SystemInfo(txtMan));
+		modules.add(barDrawer);
+		modules.add(new SystemInfo(this));
 		modules.add(new OsInfo());
 		modules.add(new TopCpu());
 		modules.add(new TopMem());
@@ -86,6 +91,14 @@ public class Core {
 		return instance;
 	}
 
+	public TextManager getTxtMan() {
+		return txtMan;
+	}
+
+	public BarDrawer getBarDrawer() {
+		return barDrawer;
+	}
+
 	public Bitmap getImageToSet(Context context, String path)
 			throws Exception {
 
@@ -95,7 +108,7 @@ public class Core {
 		for (Module module : modules)
 			module.initialize(context);
 
-		readConfigFile(path);
+		readConfigFile(path, context);
 
 		if (maxWidth == 0 || maxHeight == 0) {
 			throw (new Exception("Must specify width and height"));
@@ -300,7 +313,7 @@ public class Core {
 		return height;
 	}
 
-	private void readConfigFile(String path) throws IOException {
+	private void readConfigFile(String path, Context context) throws IOException {
 		File file = new File(path);
 		BufferedReader br = new BufferedReader(new InputStreamReader(
 				new FileInputStream(file)));
@@ -318,11 +331,10 @@ public class Core {
 				if (!loadConfig(elements))
 					for (Module module : modules) {
 						if (module.check(elements[0]).equals(Module.Result.settings)) {
-							module.setDefaults(elements);
+							module.setDefaults(elements[0], Arrays.copyOfRange(elements, 1, elements.length), context);
 							break;
 						}
 					}
-				//if (!done)
 			}
 		}
 		// text

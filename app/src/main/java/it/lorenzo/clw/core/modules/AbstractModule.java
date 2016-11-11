@@ -17,9 +17,7 @@ public abstract class AbstractModule implements Module {
 		keys = new HashMap<>();
 	}
 
-	@Override
-	public void setDefaults(String[] elements) {
-	}
+
 
 	@Override
 	public Result check(String key) {
@@ -32,5 +30,24 @@ public abstract class AbstractModule implements Module {
 	@Override
 	public BitmapWithPosition GetBmp(String key, String[] params, int maxWidth, Context context) {
 		return null;
+	}
+
+	@Override
+	public String getString(String key, String[] params, Context context) {
+		return null;
+	}
+
+	@Override
+	public void setDefaults(String key, String[] params, Context context) {
+	}
+
+	@Override
+	public void changeSetting(String key, String[] params, Context context) {
+
+	}
+
+	@Override
+	public void initialize(Context context) {
+
 	}
 }

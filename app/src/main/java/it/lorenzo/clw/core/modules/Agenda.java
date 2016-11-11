@@ -159,16 +159,16 @@ public class Agenda extends AbstractModule {
 	}
 
 	@Override
-	public void setDefaults(String[] elements) {
-		switch (elements[0]) {
+	public void setDefaults(String key, String[] params, Context context) {
+		switch (key) {
 			case (FUTURE):
-				future = Integer.parseInt(elements[1]);
+				future = Integer.parseInt(params[0]);
 				break;
 			case (CALENDARSIDS):
 				calendarQuery = "calendar_id = ";
-				for (int i = 1; i < elements.length; i++) {
-					calendarQuery += elements[i];
-					if (i + 1 < elements.length)
+				for (int i = 0; i < params.length; i++) {
+					calendarQuery += params[i];
+					if (i + 1 < params.length)
 						calendarQuery += " OR calendar_id = ";
 				}
 				break;
