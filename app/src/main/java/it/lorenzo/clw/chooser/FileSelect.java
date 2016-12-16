@@ -20,6 +20,13 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.github.angads25.filepicker.controller.DialogSelectionListener;
+import com.github.angads25.filepicker.model.DialogConfigs;
+import com.github.angads25.filepicker.model.DialogProperties;
+import com.github.angads25.filepicker.view.FilePickerDialog;
+
+import java.io.File;
+
 import it.lorenzo.clw.R;
 
 public class FileSelect extends AppCompatActivity {
@@ -98,23 +105,32 @@ public class FileSelect extends AppCompatActivity {
 
 
 	private void save(String path) {
-		SharedPreferences sharedPref = this.getSharedPreferences(
-				getString(R.string.preference), Context.MODE_PRIVATE);
-		SharedPreferences.Editor editor = sharedPref.edit();
-		editor.putString("" + id, path);
-		editor.commit();
-		Intent intent = new Intent();
-		intent.setAction("it.lorenzo.clw.intent.action.CHANGE_PICTURE");
-		int[] ids = new int[1];
-		ids[0] = id;
-		intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
-		intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, id);
-		sendBroadcast(intent);
-		setResult(RESULT_OK, intent);
 
-		Toast.makeText(this, "Using \n" + path, Toast.LENGTH_LONG).show();
+		try {
+			File file = new File(path);
+			if (file.exists() && file.canRead()) {
 
-		this.finish();
+				SharedPreferences sharedPref = this.getSharedPreferences(
+						getString(R.string.preference), Context.MODE_PRIVATE);
+				SharedPreferences.Editor editor = sharedPref.edit();
+				editor.putString("" + id, path);
+				editor.commit();
+				Intent intent = new Intent();
+				intent.setAction("it.lorenzo.clw.intent.action.CHANGE_PICTURE");
+				int[] ids = new int[1];
+				ids[0] = id;
+				intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
+				intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, id);
+				sendBroadcast(intent);
+				setResult(RESULT_OK, intent);
+
+				Toast.makeText(this, "Using \n" + path, Toast.LENGTH_LONG).show();
+				this.finish();
+			}
+		} catch (Exception ex) {
+		}
+		Toast.makeText(this, "Please select a valid file", Toast.LENGTH_LONG).show();
+
 	}
 
 	public void saveSetting(View view) {
@@ -124,21 +140,58 @@ public class FileSelect extends AppCompatActivity {
 	}
 
 	public void browse(View view) {
-		requirePermission();
-		Intent intent = new Intent(this, FileChooser.class);
-		this.startActivityForResult(intent, 100);
+
+		if (ContextCompat.checkSelfPermission(this,
+				Manifest.permission.READ_EXTERNAL_STORAGE)
+				== PackageManager.PERMISSION_GRANTED) {
+
+			requirePermission();
+			Intent intent = new Intent(this, FileChooser.class);
+			this.startActivityForResult(intent, 100);
+
+		} else {
+			Toast.makeText(this, "External storage permission required !", Toast.LENGTH_LONG).show();
+			requirePermission();
+		}
 	}
 
 	public void browse_ext(View view) {
-		requirePermission();
-		Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-		intent.setType("*/*");
-		intent.addCategory(Intent.CATEGORY_OPENABLE);
-		try {
-			startActivityForResult(intent, 100);
-		} catch (android.content.ActivityNotFoundException ex) {
-			Toast.makeText(this, "Please install a File Manager.", Toast.LENGTH_LONG).show();
+
+		if (ContextCompat.checkSelfPermission(this,
+				Manifest.permission.READ_EXTERNAL_STORAGE)
+				== PackageManager.PERMISSION_GRANTED) {
+
+
+			DialogProperties properties = new DialogProperties();
+			properties.selection_mode = DialogConfigs.SINGLE_MODE;
+			properties.selection_type = DialogConfigs.FILE_SELECT;
+			properties.root = new File(DialogConfigs.DEFAULT_DIR);
+			properties.error_dir = new File(DialogConfigs.DEFAULT_DIR);
+			properties.extensions = null;
+			FilePickerDialog dialog = new FilePickerDialog(this, properties);
+			dialog.setTitle("Select a File");
+			dialog.setDialogSelectionListener(new DialogSelectionListener() {
+				@Override
+				public void onSelectedFilePaths(String[] files) {
+					//files is the array of the paths of files selected by the Application User.
+					save(files[0]);
+				}
+			});
+			dialog.show();
+
+		} else {
+			Toast.makeText(this, "External storage permission required !", Toast.LENGTH_LONG).show();
+			requirePermission();
 		}
+//		requirePermission();
+//		Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+//		intent.setType("*/*");
+//		intent.addCategory(Intent.CATEGORY_OPENABLE);
+//		try {
+//			startActivityForResult(intent, 100);
+//		} catch (android.content.ActivityNotFoundException ex) {
+//			Toast.makeText(this, "Please install a File Manager.", Toast.LENGTH_LONG).show();
+//		}
 	}
 
 	@Override
@@ -154,8 +207,17 @@ public class FileSelect extends AppCompatActivity {
 	}
 
 	public void useExample(View view) {
-		Intent intent = new Intent(this, ExampleSelector.class);
+
+		if (ContextCompat.checkSelfPermission(this,
+				Manifest.permission.READ_EXTERNAL_STORAGE)
+				== PackageManager.PERMISSION_GRANTED) {
+
+			Intent intent = new Intent(this, ExampleSelector.class);
 		this.startActivityForResult(intent, 100);
+		} else {
+			Toast.makeText(this, "External storage permission required !", Toast.LENGTH_LONG).show();
+			requirePermission();
+		}
 	}
 
 }

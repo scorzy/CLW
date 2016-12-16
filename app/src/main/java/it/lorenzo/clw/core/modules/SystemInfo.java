@@ -324,7 +324,7 @@ public class SystemInfo extends AbstractModule {
 		NetworkInfo networkInfo = connManager
 				.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
 		*/
-		if (networkInfo.isConnected() && networkInfo.getType() == ConnectivityManager.TYPE_WIFI)
+		if (networkInfo != null && networkInfo.isConnected() && networkInfo.getType() == ConnectivityManager.TYPE_WIFI)
 			if (networkInfo.isConnected()) {
 				final WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
 				final WifiInfo connectionInfo = wifiManager.getConnectionInfo();
@@ -348,7 +348,7 @@ public class SystemInfo extends AbstractModule {
 		NetworkInfo networkInfo = connManager.getActiveNetworkInfo();
 		String ip;
 
-		if (networkInfo.isConnected() && networkInfo.getType() == ConnectivityManager.TYPE_WIFI) {
+		if (networkInfo != null && networkInfo.isConnected() && networkInfo.getType() == ConnectivityManager.TYPE_WIFI) {
 			final WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
 			final WifiInfo connectionInfo = wifiManager.getConnectionInfo();
 			if (connectionInfo != null

@@ -168,6 +168,13 @@ public class MyWidgetProvider extends AppWidgetProvider {
 			int[] ids = man.getAppWidgetIds(
 					new ComponentName(context, MyWidgetProvider.class));
 			onUpdate(context, AppWidgetManager.getInstance(context), ids);
+		}else
+		{
+			int appWidgetIds[] = AppWidgetManager.getInstance(context).getAppWidgetIds(new ComponentName(context, MyWidgetProvider.class));
+			if (appWidgetIds != null && appWidgetIds.length > 0) {
+				this.onUpdate(context,
+						AppWidgetManager.getInstance(context), appWidgetIds);
+			}
 		}
 	}
 
