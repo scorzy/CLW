@@ -13,7 +13,6 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.widget.RemoteViews;
 
@@ -146,18 +145,19 @@ public class MyWidgetProvider extends AppWidgetProvider {
 	public void onReceive(Context context, Intent intent) {
 		super.onReceive(context, intent);
 		String act = "" + intent.getAction();
+//		if (AppWidgetManager.ACTION_APPWIDGET_UPDATE.equals(act)
+//				|| act.equals("it.lorenzo.clw.intent.action.CHANGE_PICTURE")) {
+//			Bundle extras = intent.getExtras();
+//			if (extras != null) {
+//				int[] appWidgetIds = extras
+//						.getIntArray(AppWidgetManager.EXTRA_APPWIDGET_IDS);
+//				if (appWidgetIds != null && appWidgetIds.length > 0) {
+//					this.onUpdate(context,
+//							AppWidgetManager.getInstance(context), appWidgetIds);
+//				}
+//			}
+//		} else
 		if (AppWidgetManager.ACTION_APPWIDGET_UPDATE.equals(act)
-				|| act.equals("it.lorenzo.clw.intent.action.CHANGE_PICTURE")) {
-			Bundle extras = intent.getExtras();
-			if (extras != null) {
-				int[] appWidgetIds = extras
-						.getIntArray(AppWidgetManager.EXTRA_APPWIDGET_IDS);
-				if (appWidgetIds != null && appWidgetIds.length > 0) {
-					this.onUpdate(context,
-							AppWidgetManager.getInstance(context), appWidgetIds);
-				}
-			}
-		} else if (AppWidgetManager.ACTION_APPWIDGET_UPDATE.equals(act)
 				|| act.equals("it.lorenzo.clw.intent.action.SETTINGS_CHANGED")) {
 			removeAlarm(context);
 			createAlarm(context);
