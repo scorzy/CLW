@@ -69,6 +69,13 @@ public class Example {
 		if (example.path != null && example.path.canRead())
 			exampleList.add(example);
 
+		example = new Example();
+		example.caption = "CPU";
+		example.img = R.drawable.cpu;
+		example.file = R.raw.cpu;
+		example.saveToDisk(context);
+		if (example.path != null && example.path.canRead())
+			exampleList.add(example);
 
 		return exampleList;
 	}

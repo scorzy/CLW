@@ -33,7 +33,6 @@ public class OsInfo extends AbstractModule {
 		keys.put(EXEC, Result.string);
 	}
 
-
 	@Override
 	public void initialize(Context context) {
 

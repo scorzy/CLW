@@ -59,7 +59,6 @@ public class Agenda extends AbstractModule {
 	private String calendarQuery;
 	private Cursor cursor;
 
-
 	public Agenda() {
 		calendarQuery = "";
 		keys.put(AGENDA, Result.string);
@@ -187,5 +186,11 @@ public class Agenda extends AbstractModule {
 		ContentUris.appendId(eventsUriBuilder, max);
 		Uri eventsUri = eventsUriBuilder.build();
 		cursor = context.getContentResolver().query(eventsUri, EVENTS, " ( " + calendarQuery + " ) ", null, CalendarContract.Instances.BEGIN + " ASC");
+	}
+
+	@Override
+	protected void finalize() {
+		if (cursor != null && !cursor.isClosed())
+			cursor.close();
 	}
 }

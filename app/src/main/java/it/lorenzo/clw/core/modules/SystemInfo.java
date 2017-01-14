@@ -34,6 +34,7 @@ public class SystemInfo extends AbstractModule {
 
 	public final static String cpu = "/sys/devices/system/cpu/cpu";
 	public final static String cpuCurr = "/cpufreq/scaling_cur_freq";
+
 	public final static String CPU_FREQ = "cpuFreq";
 
 	public final static String BATTERY_PERCENT = "battery_percent";

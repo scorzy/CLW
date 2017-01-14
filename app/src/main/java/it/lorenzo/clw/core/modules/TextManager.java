@@ -324,6 +324,7 @@ public class TextManager implements Module {
 		currentLineWidth = -1;
 	}
 
+
 	@Override
 	public BitmapWithPosition GetBmp(String key, String[] params, int maxWidth, Context context) {
 		return null;
@@ -333,4 +334,10 @@ public class TextManager implements Module {
 		Paint fillPaint = getFillPaint();
 		c.drawLine(currentX, y, c.getWidth(), y, fillPaint);
 	}
+
+	@Override
+	public void finalize(Context context) {
+
+	}
+
 }

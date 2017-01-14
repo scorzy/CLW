@@ -105,7 +105,7 @@ public class FileSelect extends AppCompatActivity {
 
 
 	private void save(String path) {
-
+		boolean saved = false;
 		try {
 			File file = new File(path);
 			if (file.exists() && file.canRead()) {
@@ -125,11 +125,13 @@ public class FileSelect extends AppCompatActivity {
 				setResult(RESULT_OK, intent);
 
 				Toast.makeText(this, "Using \n" + path, Toast.LENGTH_LONG).show();
+				saved = true;
 				this.finish();
 			}
 		} catch (Exception ex) {
 		}
-		Toast.makeText(this, "Please select a valid file", Toast.LENGTH_LONG).show();
+		if (!saved)
+			Toast.makeText(this, "Please select a valid file", Toast.LENGTH_LONG).show();
 
 	}
 

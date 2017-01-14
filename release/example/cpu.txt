@@ -1,0 +1,33 @@
+width 440
+height 300
+
+fontSize 19
+fontOutSize 5
+
+fontShadowColor #70000000
+fontShadowBlur 8
+fontShadowX 2
+fontShadowY 2
+
+fontOutColor #000000
+fontColor #ffffff
+
+xOffsetRight 6
+xOffsetLeft 6
+#bgColor red
+
+#font /system/fonts/DroidSans-Bold.ttf
+
+vSpace 0
+color1 #00B800
+
+lineWidth 3
+
+TEXT
+${fontColor color1}${fontSize 24}CPU${hline} ${fontColor} ${fontSize}
+$core_number  X ${min_freq_g cpu1} Ghz - ${max_freq_g cpu1} Ghz
+tot ${cpu cpu0} % ${cpubar cpu0} 
+cpu1 ${freq_g cpu0} Ghz
+${cpu cpu1} % ${cpubar cpu1} 
+cpu2 ${freq_g cpu1} Ghz
+${cpu cpu2} % ${cpubar cpu2} 

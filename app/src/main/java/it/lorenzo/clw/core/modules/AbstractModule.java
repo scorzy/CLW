@@ -13,11 +13,9 @@ public abstract class AbstractModule implements Module {
 
 	protected HashMap<String, Result> keys;
 
-	public AbstractModule() {
+	protected AbstractModule() {
 		keys = new HashMap<>();
 	}
-
-
 
 	@Override
 	public Result check(String key) {
@@ -49,5 +47,9 @@ public abstract class AbstractModule implements Module {
 	@Override
 	public void initialize(Context context) {
 
+	}
+
+	@Override
+	public void finalize(Context context) {
 	}
 }

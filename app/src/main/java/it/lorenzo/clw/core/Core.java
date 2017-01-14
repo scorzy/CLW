@@ -132,6 +132,9 @@ public class Core {
 				xOffsetLeft = xOffsetLeftRestore;
 				xOffsetRight = xOffsetRightRestore;
 				y = newy;
+
+				for (Module module : modules)
+					module.finalize(context);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -180,7 +183,7 @@ public class Core {
 			if (first == -1)
 				first = line.length();
 			if (first == current) {
-				String key = "";
+				String key;
 				current++;
 				String[] params = null;
 				if (line.charAt(current) == '{') {
@@ -193,6 +196,12 @@ public class Core {
 						key = stuff.substring(0, stuff.indexOf(" "));
 						params = (stuff.substring(key.length() + 1)).split(" ");
 					}
+					current = last + 1;
+				} else {
+					int last = line.indexOf(" ", current);
+					if (last < 0)
+						last = line.length();
+					key = line.substring(current, last);
 					current = last + 1;
 				}
 

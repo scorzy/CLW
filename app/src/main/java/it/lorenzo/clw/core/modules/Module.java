@@ -20,6 +20,8 @@ public interface Module {
 
     void initialize(Context context);
 
+	void finalize(Context context);
+
     void setDefaults(String key, String[] params, Context context);
 
     enum Result {
