@@ -8,6 +8,8 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import static java.lang.Runtime.getRuntime;
+
 /**
  * Created by lorenzo on 21/02/15.
  */
@@ -32,17 +34,16 @@ public class CommonUtility {
 			return Integer.parseInt(sb.toString());
 		} catch (IOException e) {
 			e.printStackTrace();
-			return 0;
 		} finally {
 			if (sc != null)
 				sc.close();
 		}
+		return 0;
 	}
 
 	public static String convert(long n) {
 		return convert(n, 0);
 	}
-
 
 	public static String convert(long n, int start) {
 		n = (long) (n * Math.pow(1024, start));
@@ -73,7 +74,7 @@ public class CommonUtility {
 	public static String executeCommand(String command) {
 		try {
 
-			Process process = Runtime.getRuntime().exec(command);
+			Process process = getRuntime().exec(command);
 			BufferedReader reader = new BufferedReader(
 					new InputStreamReader(process.getInputStream()));
 			int read;
@@ -93,7 +94,7 @@ public class CommonUtility {
 
 	public static ArrayList<String> executeCommandToArray(String command) {
 		try {
-			Process process = Runtime.getRuntime().exec(command);
+			Process process = getRuntime().exec(command);
 			BufferedReader reader = new BufferedReader(
 					new InputStreamReader(process.getInputStream()));
 			ArrayList<String> stringArray = new ArrayList<String>();

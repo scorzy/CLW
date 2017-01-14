@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import it.lorenzo.clw.core.modules.Agenda;
+import it.lorenzo.clw.core.modules.Cpu;
 import it.lorenzo.clw.core.modules.Image;
 import it.lorenzo.clw.core.modules.Module;
 import it.lorenzo.clw.core.modules.OsInfo;
@@ -80,6 +81,8 @@ public class Core {
 		modules.add(new TopMem());
 		modules.add(new Agenda());
 		modules.add(new Image());
+		modules.add(new Cpu());
+
 		drawCenter = new ArrayList<>();
 		drawRight = new ArrayList<>();
 	}
