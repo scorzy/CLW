@@ -66,17 +66,13 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.MyViewHo
 				button.setText(example.caption);
 				imageView.setImageResource(example.img);
 				button.setTag(example.path);
-				button.setOnClickListener(new View.OnClickListener() {
-
-					@Override
-					public void onClick(View view) {
-						File path = (File) view.getTag();
-						Intent intent = new Intent(view.getContext(), FileSelect.class);
-						intent.putExtra("path", path);
-						intent.setData(Uri.fromFile(path));
-						((Activity) view.getContext()).setResult(100, intent);
-						((Activity) view.getContext()).finish();
-					}
+				button.setOnClickListener(view -> {
+					File path = (File) view.getTag();
+					Intent intent = new Intent(view.getContext(), FileSelect.class);
+					intent.putExtra("path", path);
+					intent.setData(Uri.fromFile(path));
+					((Activity) view.getContext()).setResult(100, intent);
+					((Activity) view.getContext()).finish();
 				});
 			}
 		}

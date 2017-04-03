@@ -4,7 +4,7 @@
     android:id="@+id/activity_exampleselector"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    tools:context="it.lorenzo.clw.chooser.exampleselector">
+    tools:context="it.lorenzo.clw.chooser.ExampleSelector">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/my_recycler_view"

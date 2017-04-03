@@ -20,7 +20,6 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.github.angads25.filepicker.controller.DialogSelectionListener;
 import com.github.angads25.filepicker.model.DialogConfigs;
 import com.github.angads25.filepicker.model.DialogProperties;
 import com.github.angads25.filepicker.view.FilePickerDialog;
@@ -65,8 +64,8 @@ public class FileSelect extends AppCompatActivity {
 				ActivityCompat.requestPermissions(this,
 						new String[]{
 								Manifest.permission.WRITE_EXTERNAL_STORAGE,
-								Manifest.permission.READ_EXTERNAL_STORAGE,
-								Manifest.permission.READ_CALENDAR},
+								Manifest.permission.READ_CALENDAR,
+								Manifest.permission.READ_EXTERNAL_STORAGE},
 						115);
 			}
 		} else if (ContextCompat.checkSelfPermission(this,
@@ -88,17 +87,17 @@ public class FileSelect extends AppCompatActivity {
 										   @NonNull String permissions[], @NonNull int[] grantResults) {
 		if (requestCode == 115) {
 			if (grantResults.length > 0
-					&& grantResults[0] == PackageManager.PERMISSION_DENIED) {
-				Toast.makeText(this, "CLW will not work without Read external storage permission !", Toast.LENGTH_LONG).show();
-			}
-			if (grantResults.length > 1
 					&& grantResults[1] == PackageManager.PERMISSION_DENIED) {
 				Toast.makeText(this, "Example will not work without Write external storage permission !", Toast.LENGTH_LONG).show();
 
 			}
-			if (grantResults.length > 2
+			if (grantResults.length > 1
 					&& grantResults[2] == PackageManager.PERMISSION_DENIED) {
 				Toast.makeText(this, "Agenda will not work !", Toast.LENGTH_LONG).show();
+			}
+			if (grantResults.length > 2
+					&& grantResults[0] == PackageManager.PERMISSION_DENIED) {
+				Toast.makeText(this, "CLW will not work without Read external storage permission !", Toast.LENGTH_LONG).show();
 			}
 		}
 	}
@@ -114,7 +113,7 @@ public class FileSelect extends AppCompatActivity {
 						getString(R.string.preference), Context.MODE_PRIVATE);
 				SharedPreferences.Editor editor = sharedPref.edit();
 				editor.putString("" + id, path);
-				editor.commit();
+				editor.apply();
 				Intent intent = new Intent();
 				intent.setAction("it.lorenzo.clw.intent.action.CHANGE_PICTURE");
 				int[] ids = new int[1];
@@ -172,12 +171,9 @@ public class FileSelect extends AppCompatActivity {
 			properties.extensions = null;
 			FilePickerDialog dialog = new FilePickerDialog(this, properties);
 			dialog.setTitle("Select a File");
-			dialog.setDialogSelectionListener(new DialogSelectionListener() {
-				@Override
-				public void onSelectedFilePaths(String[] files) {
-					//files is the array of the paths of files selected by the Application User.
-					save(files[0]);
-				}
+			dialog.setDialogSelectionListener(files -> {
+				//files is the array of the paths of files selected by the Application User.
+				save(files[0]);
 			});
 			dialog.show();
 
@@ -211,11 +207,11 @@ public class FileSelect extends AppCompatActivity {
 	public void useExample(View view) {
 
 		if (ContextCompat.checkSelfPermission(this,
-				Manifest.permission.READ_EXTERNAL_STORAGE)
+				Manifest.permission.WRITE_EXTERNAL_STORAGE)
 				== PackageManager.PERMISSION_GRANTED) {
 
 			Intent intent = new Intent(this, ExampleSelector.class);
-		this.startActivityForResult(intent, 100);
+			this.startActivityForResult(intent, 100);
 		} else {
 			Toast.makeText(this, "External storage permission required !", Toast.LENGTH_LONG).show();
 			requirePermission();

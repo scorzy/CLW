@@ -77,12 +77,9 @@ public class SettingsActivity extends PreferenceActivity implements Preference.O
 
 		Preference button = getPreferenceManager().findPreference("idsbutton");
 		if (button != null) {
-			button.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-				@Override
-				public boolean onPreferenceClick(Preference arg0) {
-					showCalendarIds();
-					return true;
-				}
+			button.setOnPreferenceClickListener(arg0 -> {
+				showCalendarIds();
+				return true;
 			});
 		}
 
@@ -91,27 +88,30 @@ public class SettingsActivity extends PreferenceActivity implements Preference.O
 			File clwDir = new File(Environment.getExternalStorageDirectory(), "CLW-examples");
 			textView.setSummary(clwDir.getAbsolutePath());
 			final Context context = this;
-			textView.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-				@Override
-				public boolean onPreferenceClick(Preference arg0) {
-					Example.createExamples(context);
-					openFolder();
-					return true;
-				}
+			textView.setOnPreferenceClickListener(arg0 -> {
+				Example.createExamples(context);
+				openFolder();
+				return true;
 			});
 		}
 	}
 
 	public void openFolder() {
 		File clwDir = new File(Environment.getExternalStorageDirectory(), "CLW-examples");
-		Uri selectedUri = Uri.fromFile(clwDir);
-		Intent intent = new Intent(Intent.ACTION_VIEW);
-		intent.setDataAndType(selectedUri, "resource/folder");
-		if (intent.resolveActivityInfo(getPackageManager(), 0) != null) {
-			startActivity(intent);
-		} else {
-			Toast.makeText(this, "Please install a File Manager.", Toast.LENGTH_LONG).show();
+		if (clwDir.exists()) {
+			Uri selectedUri = Uri.fromFile(clwDir);
+			Intent intent = new Intent(Intent.ACTION_VIEW);
+			intent.setDataAndType(selectedUri, "resource/folder");
+			if (intent.resolveActivityInfo(getPackageManager(), 0) != null) {
+				startActivity(intent);
+			} else {
+				Toast.makeText(this, "Please install a File Manager.", Toast.LENGTH_LONG).show();
+			}
+		}else
+		{
+			Toast.makeText(this, "Example folder not found.", Toast.LENGTH_LONG).show();
 		}
+
 	}
 
 	private void showCalendarIds() {

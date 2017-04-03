@@ -26,7 +26,7 @@ public class Example {
 	public File path;
 
 	public static ArrayList<Example> createExamples(Context context) {
-		ArrayList<Example> exampleList = new ArrayList<Example>();
+		ArrayList<Example> exampleList = new ArrayList<>();
 
 		Example example = new Example();
 		example.caption = "Hello_World_!";
