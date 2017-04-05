@@ -19,6 +19,7 @@ import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatDelegate;
 import android.view.View;
 import android.view.ViewGroup;
@@ -99,9 +100,16 @@ public class SettingsActivity extends PreferenceActivity implements Preference.O
 	public void openFolder() {
 		File clwDir = new File(Environment.getExternalStorageDirectory(), "CLW-examples");
 		if (clwDir.exists()) {
-			Uri selectedUri = Uri.fromFile(clwDir);
+			Uri selectedUri;
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+				selectedUri = FileProvider.getUriForFile(this,
+						getApplicationContext().getPackageName() + ".provider", clwDir);
+			} else
+				selectedUri = Uri.fromFile(clwDir);
+
 			Intent intent = new Intent(Intent.ACTION_VIEW);
 			intent.setDataAndType(selectedUri, "resource/folder");
+			intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
 			if (intent.resolveActivityInfo(getPackageManager(), 0) != null) {
 				startActivity(intent);
 			} else {
