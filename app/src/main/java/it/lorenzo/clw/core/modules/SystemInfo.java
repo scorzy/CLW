@@ -32,31 +32,31 @@ import it.lorenzo.clw.core.modules.Utility.CommonUtility;
 
 public class SystemInfo extends AbstractModule {
 
-	public final static String cpu = "/sys/devices/system/cpu/cpu";
-	public final static String cpuCurr = "/cpufreq/scaling_cur_freq";
+	private final static String cpu = "/sys/devices/system/cpu/cpu";
+	private final static String cpuCurr = "/cpufreq/scaling_cur_freq";
 
-	public final static String CPU_FREQ = "cpuFreq";
+	private final static String CPU_FREQ = "cpuFreq";
 
-	public final static String BATTERY_PERCENT = "battery_percent";
-	public final static String BATTERY_CHARGING = "battery_charging";
-	public final static String BATTERY_BAR = "battery_bar";
+	private final static String BATTERY_PERCENT = "battery_percent";
+	private final static String BATTERY_CHARGING = "battery_charging";
+	private final static String BATTERY_BAR = "battery_bar";
 
-	public final static String UPTIME = "uptime";
+	private final static String UPTIME = "uptime";
 
-	public final static String MEM_FREE = "mem_free";
-	public final static String MEM_USED = "mem_used";
-	public final static String MEM_TOTAL = "mem_total";
-	public final static String MEM_PERCENT = "mem_percent";
-	public final static String MEM_BAR = "mem_bar";
+	private final static String MEM_FREE = "mem_free";
+	private final static String MEM_USED = "mem_used";
+	private final static String MEM_TOTAL = "mem_total";
+	private final static String MEM_PERCENT = "mem_percent";
+	private final static String MEM_BAR = "mem_bar";
 
-	public final static String FS_FREE = "fs_free";
-	public final static String FS_USED = "fs_used";
-	public final static String FS_SIZE = "fs_size";
-	public final static String FS_PERCENT = "fs_perc";
-	public final static String FS_BAR = "fs_bar";
+	private final static String FS_FREE = "fs_free";
+	private final static String FS_USED = "fs_used";
+	private final static String FS_SIZE = "fs_size";
+	private final static String FS_PERCENT = "fs_perc";
+	private final static String FS_BAR = "fs_bar";
 
-	public final static String SSID = "ssid";
-	public final static String WIFI_IP = "wifi_ip";
+	private final static String SSID = "ssid";
+	private final static String WIFI_IP = "wifi_ip";
 
 	private Core core;
 	private long maxRam;
@@ -321,10 +321,7 @@ public class SystemInfo extends AbstractModule {
 				.getSystemService(Context.CONNECTIVITY_SERVICE);
 
 		NetworkInfo networkInfo = connManager.getActiveNetworkInfo();
-		/*
-		NetworkInfo networkInfo = connManager
-				.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-		*/
+
 		if (networkInfo != null && networkInfo.isConnected() && networkInfo.getType() == ConnectivityManager.TYPE_WIFI)
 			if (networkInfo.isConnected()) {
 				final WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
@@ -342,10 +339,7 @@ public class SystemInfo extends AbstractModule {
 	private String getWiFiIp(Context context) {
 		ConnectivityManager connManager = (ConnectivityManager) context
 				.getSystemService(Context.CONNECTIVITY_SERVICE);
-		/*
-		NetworkInfo networkInfo = connManager
-				.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-		*/
+
 		NetworkInfo networkInfo = connManager.getActiveNetworkInfo();
 		String ip;
 

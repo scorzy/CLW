@@ -20,10 +20,10 @@ import it.lorenzo.clw.R;
  * Represent an example configuration.
  */
 public class Example {
-	public String caption;
-	public int img;
-	public int file;
-	public File path;
+	private String caption;
+	private int img;
+	private int file;
+	private File path;
 
 	public static ArrayList<Example> createExamples(Context context) {
 		ArrayList<Example> exampleList = new ArrayList<>();
@@ -33,51 +33,72 @@ public class Example {
 		example.img = R.drawable.text;
 		example.file = R.raw.text;
 		example.saveToDisk(context);
-		if (example.path != null && example.path.canRead())
-			exampleList.add(example);
-
+		exampleList.add(example);
 
 		example = new Example();
 		example.caption = "Example";
 		example.img = R.drawable.example_img;
 		example.file = R.raw.example;
 		example.saveToDisk(context);
-		if (example.path != null && example.path.canRead())
-			exampleList.add(example);
+		exampleList.add(example);
 
 		example = new Example();
 		example.caption = "Top";
 		example.img = R.drawable.top;
 		example.file = R.raw.top;
 		example.saveToDisk(context);
-		if (example.path != null && example.path.canRead())
-			exampleList.add(example);
+		exampleList.add(example);
 
 		example = new Example();
 		example.caption = "Agenda";
 		example.img = R.drawable.agenda;
 		example.file = R.raw.agenda;
 		example.saveToDisk(context);
-		if (example.path != null && example.path.canRead())
-			exampleList.add(example);
+		exampleList.add(example);
 
 		example = new Example();
 		example.caption = "PipBoy-HDPI-device";
 		example.img = R.drawable.pipboy;
 		example.file = R.raw.pipboy;
 		example.saveToDisk(context);
-		if (example.path != null && example.path.canRead())
-			exampleList.add(example);
+		exampleList.add(example);
 
 		example = new Example();
 		example.caption = "CPU";
 		example.img = R.drawable.cpu;
 		example.file = R.raw.cpu;
 		example.saveToDisk(context);
-		if (example.path != null && example.path.canRead())
-			exampleList.add(example);
+		exampleList.add(example);
+
+		//	exampleList.forEach(ex -> ex.saveToDisk(context));
+		//	exampleList.removeIf(ex -> ex.path == null || !ex.path.canRead());
+
+		for (Example ex : exampleList) {
+			ex.saveToDisk(context);
+			if (ex.path == null || !ex.path.canRead())
+				exampleList.remove(ex);
+		}
+
+		if (!exampleList.isEmpty())
+			Toast.makeText(context, "Examples creates successfully", Toast.LENGTH_SHORT).show();
 
 		return exampleList;
+	}
+
+	public String getCaption() {
+		return caption;
+	}
+
+	public int getImg() {
+		return img;
+	}
+
+	public int getFile() {
+		return file;
+	}
+
+	public File getPath() {
+		return path;
 	}
 
 	public void saveToDisk(Context context) {

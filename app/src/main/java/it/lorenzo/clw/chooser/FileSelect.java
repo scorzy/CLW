@@ -181,15 +181,6 @@ public class FileSelect extends AppCompatActivity {
 			Toast.makeText(this, "External storage permission required !", Toast.LENGTH_LONG).show();
 			requirePermission();
 		}
-//		requirePermission();
-//		Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-//		intent.setType("*/*");
-//		intent.addCategory(Intent.CATEGORY_OPENABLE);
-//		try {
-//			startActivityForResult(intent, 100);
-//		} catch (android.content.ActivityNotFoundException ex) {
-//			Toast.makeText(this, "Please install a File Manager.", Toast.LENGTH_LONG).show();
-//		}
 	}
 
 	@Override

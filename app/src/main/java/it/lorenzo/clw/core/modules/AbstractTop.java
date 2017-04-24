@@ -31,22 +31,20 @@ public abstract class AbstractTop extends AbstractModule {
 	private String getAppName(int pID, Context context) {
 		String processName = "";
 		ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-		List l = am.getRunningAppProcesses();
-		Iterator i = l.iterator();
+		List<ActivityManager.RunningAppProcessInfo> l = am.getRunningAppProcesses();
+		Iterator<ActivityManager.RunningAppProcessInfo> i = l.iterator();
 		PackageManager pm = context.getPackageManager();
 		while (i.hasNext()) {
-			ActivityManager.RunningAppProcessInfo info = (ActivityManager.RunningAppProcessInfo) (i.next());
+			ActivityManager.RunningAppProcessInfo info = i.next();
 			try {
 				if (info.pid == pID) {
 					CharSequence c = pm.getApplicationLabel(pm.getApplicationInfo(info.processName, PackageManager.GET_META_DATA));
-					//Log.i("Process", "Id: " + info.pid + " ProcessName: " + info.processName + "  Label: " + c.toString());
 					if (c != null && c.length() > 0)
 						processName = c.toString();
 					else
 						processName = info.processName;
 				}
 			} catch (Exception e) {
-				//Log.d("Process", "Error>> :"+ e.toString());
 			}
 		}
 		return processName;

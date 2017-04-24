@@ -54,7 +54,6 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.MyViewHo
 		private Button button;
 
 		public MyViewHolder(View itemView) {
-
 			super(itemView);
 			imageView = (ImageView) itemView.findViewById(R.id.imageView);
 			button = (Button) itemView.findViewById(R.id.button3);
@@ -63,9 +62,9 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.MyViewHo
 		public void setData(Example example) {
 
 			if (example != null) {
-				button.setText(example.caption);
-				imageView.setImageResource(example.img);
-				button.setTag(example.path);
+				button.setText(example.getCaption());
+				imageView.setImageResource(example.getImg());
+				button.setTag(example.getPath());
 				button.setOnClickListener(view -> {
 					File path = (File) view.getTag();
 					Intent intent = new Intent(view.getContext(), FileSelect.class);

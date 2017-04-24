@@ -23,15 +23,4 @@
         android:summary="@string/use_notification"
         android:title="@string/use_notification" />
 
-    <Preference
-        android:key="idsbutton"
-        android:title="Click to show calendars ids" />
-
-    <Preference
-        android:enabled="true"
-        android:key="example_key"
-        android:selectable="true"
-        android:summary=""
-        android:title="Example folder - click to open" />
-
 </PreferenceScreen>

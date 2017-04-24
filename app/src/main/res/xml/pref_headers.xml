@@ -3,7 +3,7 @@
     <!-- These settings headers are only used on tablets. -->
 
     <header
-        android:fragment="it.lorenzo.clw.gui.SettingsActivity$GeneralPreferenceFragment"
+        android:fragment="it.lorenzo.clw.gui.SettingsActivity"
         android:title="@string/pref_header_general"/>
 
 </preference-headers>
