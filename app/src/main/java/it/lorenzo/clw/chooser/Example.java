@@ -9,6 +9,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import it.lorenzo.clw.R;
 
@@ -73,7 +74,9 @@ public class Example {
 		//	exampleList.forEach(ex -> ex.saveToDisk(context));
 		//	exampleList.removeIf(ex -> ex.path == null || !ex.path.canRead());
 
-		for (Example ex : exampleList) {
+		Iterator<Example> iter = exampleList.iterator();
+		while (iter.hasNext()) {
+			Example ex = iter.next();
 			ex.saveToDisk(context);
 			if (ex.path == null || !ex.path.canRead())
 				exampleList.remove(ex);

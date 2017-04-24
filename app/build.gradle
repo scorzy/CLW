@@ -8,7 +8,7 @@ android {
         minSdkVersion 14
         targetSdkVersion 25
         versionCode 7
-        versionName '1.1.0'
+        versionName '1.2.0'
 
         jackOptions {
             enabled true
@@ -17,7 +17,7 @@ android {
     }
     buildTypes {
         release {
-            shrinkResources true
+            shrinkResources false
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
@@ -31,10 +31,6 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 }
-
-
-
-
 
 dependencies {
     compile 'com.android.support:appcompat-v7:25.3.1'
