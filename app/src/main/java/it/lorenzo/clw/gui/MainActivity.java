@@ -1,5 +1,6 @@
 package it.lorenzo.clw.gui;
 
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -13,8 +14,10 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import it.lorenzo.clw.R;
+import it.lorenzo.clw.chooser.FileSelect;
 
 public class MainActivity extends AppCompatActivity
 		implements NavigationView.OnNavigationItemSelectedListener {
@@ -89,6 +92,7 @@ public class MainActivity extends AppCompatActivity
 			}
 		});
 
+		FileSelect.requirePermission(this, this);
 	}
 
 	@Override
@@ -108,5 +112,25 @@ public class MainActivity extends AppCompatActivity
 		}
 		drawer.closeDrawers();
 		return false;
+	}
+
+	@Override
+	public void onRequestPermissionsResult(int requestCode,
+										   @NonNull String permissions[], @NonNull int[] grantResults) {
+		if (requestCode == 115) {
+			if (grantResults.length > 0
+					&& grantResults[1] == PackageManager.PERMISSION_DENIED) {
+				Toast.makeText(this, "Example will not work without Write external storage permission !", Toast.LENGTH_LONG).show();
+
+			}
+			if (grantResults.length > 1
+					&& grantResults[2] == PackageManager.PERMISSION_DENIED) {
+				Toast.makeText(this, "Agenda will not work !", Toast.LENGTH_LONG).show();
+			}
+			if (grantResults.length > 2
+					&& grantResults[0] == PackageManager.PERMISSION_DENIED) {
+				Toast.makeText(this, "CLW will not work without Read external storage permission !", Toast.LENGTH_LONG).show();
+			}
+		}
 	}
 }

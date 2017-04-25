@@ -9,7 +9,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Iterator;
 
 import it.lorenzo.clw.R;
 
@@ -34,56 +33,59 @@ public class Example {
 		example.img = R.drawable.text;
 		example.file = R.raw.text;
 		example.saveToDisk(context);
-		exampleList.add(example);
+		if (example.path != null && example.path.canRead())
+			exampleList.add(example);
 
 		example = new Example();
 		example.caption = "Example";
 		example.img = R.drawable.example_img;
 		example.file = R.raw.example;
 		example.saveToDisk(context);
-		exampleList.add(example);
+		if (example.path != null && example.path.canRead())
+			exampleList.add(example);
 
 		example = new Example();
 		example.caption = "Top";
 		example.img = R.drawable.top;
 		example.file = R.raw.top;
 		example.saveToDisk(context);
-		exampleList.add(example);
+		if (example.path != null && example.path.canRead())
+			exampleList.add(example);
 
 		example = new Example();
 		example.caption = "Agenda";
 		example.img = R.drawable.agenda;
 		example.file = R.raw.agenda;
 		example.saveToDisk(context);
-		exampleList.add(example);
+		if (example.path != null && example.path.canRead())
+			exampleList.add(example);
 
 		example = new Example();
 		example.caption = "PipBoy-HDPI-device";
 		example.img = R.drawable.pipboy;
 		example.file = R.raw.pipboy;
 		example.saveToDisk(context);
-		exampleList.add(example);
+		if (example.path != null && example.path.canRead())
+			exampleList.add(example);
 
 		example = new Example();
 		example.caption = "CPU";
 		example.img = R.drawable.cpu;
 		example.file = R.raw.cpu;
 		example.saveToDisk(context);
-		exampleList.add(example);
+		if (example.path != null && example.path.canRead())
+			exampleList.add(example);
 
 		//	exampleList.forEach(ex -> ex.saveToDisk(context));
 		//	exampleList.removeIf(ex -> ex.path == null || !ex.path.canRead());
 
-		Iterator<Example> iter = exampleList.iterator();
-		while (iter.hasNext()) {
-			Example ex = iter.next();
-			ex.saveToDisk(context);
-			if (ex.path == null || !ex.path.canRead())
-				exampleList.remove(ex);
-		}
 
 		if (!exampleList.isEmpty())
 			Toast.makeText(context, "Examples creates successfully", Toast.LENGTH_SHORT).show();
+		else {
+			Toast.makeText(context, "Cannot create examples. Please grant storage permission, close clw and remove it from recent apps, tha try again.", Toast.LENGTH_LONG).show();
+			return null;
+		}
 
 		return exampleList;
 	}

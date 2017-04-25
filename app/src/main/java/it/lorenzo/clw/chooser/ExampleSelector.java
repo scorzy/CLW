@@ -14,6 +14,7 @@ public class ExampleSelector extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
 		setContentView(R.layout.activity_exampleselector);
 
 		RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
@@ -29,8 +30,11 @@ public class ExampleSelector extends Activity {
 
 		ArrayList<Example> exampleList = Example.createExamples(this);
 
-		ExampleAdapter adapter = new ExampleAdapter(exampleList);
-		mRecyclerView.setAdapter(adapter);
+		if (exampleList != null) {
+			ExampleAdapter adapter = new ExampleAdapter(exampleList);
+			mRecyclerView.setAdapter(adapter);
+		}
+
 	}
 }
 

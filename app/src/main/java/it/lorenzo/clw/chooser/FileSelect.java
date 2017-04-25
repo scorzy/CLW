@@ -5,6 +5,7 @@ package it.lorenzo.clw.chooser;
  */
 
 import android.Manifest;
+import android.app.Activity;
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
@@ -25,12 +26,45 @@ import com.github.angads25.filepicker.model.DialogProperties;
 import com.github.angads25.filepicker.view.FilePickerDialog;
 
 import java.io.File;
+import java.util.ArrayList;
 
 import it.lorenzo.clw.R;
 
 public class FileSelect extends AppCompatActivity {
 
 	private int id = 0;
+
+	public static void requirePermission(Context context, Activity activity) {
+		if (Build.VERSION.SDK_INT > 16) {
+			if (ContextCompat.checkSelfPermission(context,
+					Manifest.permission.WRITE_EXTERNAL_STORAGE)
+					!= PackageManager.PERMISSION_GRANTED ||
+					ContextCompat.checkSelfPermission(context,
+							Manifest.permission.READ_EXTERNAL_STORAGE)
+							!= PackageManager.PERMISSION_GRANTED ||
+					ContextCompat.checkSelfPermission(context,
+							Manifest.permission.READ_CALENDAR)
+							!= PackageManager.PERMISSION_GRANTED) {
+				ActivityCompat.requestPermissions(activity,
+						new String[]{
+								Manifest.permission.WRITE_EXTERNAL_STORAGE,
+								Manifest.permission.READ_CALENDAR,
+								Manifest.permission.READ_EXTERNAL_STORAGE},
+						115);
+			}
+		} else if (ContextCompat.checkSelfPermission(context,
+				Manifest.permission.WRITE_EXTERNAL_STORAGE)
+				!= PackageManager.PERMISSION_GRANTED ||
+				ContextCompat.checkSelfPermission(context,
+						Manifest.permission.READ_CALENDAR)
+						!= PackageManager.PERMISSION_GRANTED) {
+			ActivityCompat.requestPermissions(activity,
+					new String[]{
+							Manifest.permission.WRITE_EXTERNAL_STORAGE,
+							Manifest.permission.READ_CALENDAR},
+					115);
+		}
+	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +73,7 @@ public class FileSelect extends AppCompatActivity {
 
 		setContentView(R.layout.activity_file_select);
 
-		requirePermission();
+		requirePermission(this, this);
 
 		Intent intent = getIntent();
 		Bundle extras = intent.getExtras();
@@ -47,38 +81,6 @@ public class FileSelect extends AppCompatActivity {
 			id = extras.getInt(
 					AppWidgetManager.EXTRA_APPWIDGET_ID,
 					AppWidgetManager.INVALID_APPWIDGET_ID);
-		}
-	}
-
-	private void requirePermission() {
-		if (Build.VERSION.SDK_INT > 16) {
-			if (ContextCompat.checkSelfPermission(this,
-					Manifest.permission.WRITE_EXTERNAL_STORAGE)
-					!= PackageManager.PERMISSION_GRANTED ||
-					ContextCompat.checkSelfPermission(this,
-							Manifest.permission.READ_EXTERNAL_STORAGE)
-							!= PackageManager.PERMISSION_GRANTED ||
-					ContextCompat.checkSelfPermission(this,
-							Manifest.permission.READ_CALENDAR)
-							!= PackageManager.PERMISSION_GRANTED) {
-				ActivityCompat.requestPermissions(this,
-						new String[]{
-								Manifest.permission.WRITE_EXTERNAL_STORAGE,
-								Manifest.permission.READ_CALENDAR,
-								Manifest.permission.READ_EXTERNAL_STORAGE},
-						115);
-			}
-		} else if (ContextCompat.checkSelfPermission(this,
-				Manifest.permission.WRITE_EXTERNAL_STORAGE)
-				!= PackageManager.PERMISSION_GRANTED ||
-				ContextCompat.checkSelfPermission(this,
-						Manifest.permission.READ_CALENDAR)
-						!= PackageManager.PERMISSION_GRANTED) {
-			ActivityCompat.requestPermissions(this,
-					new String[]{
-							Manifest.permission.WRITE_EXTERNAL_STORAGE,
-							Manifest.permission.READ_CALENDAR},
-					115);
 		}
 	}
 
@@ -146,13 +148,13 @@ public class FileSelect extends AppCompatActivity {
 				Manifest.permission.READ_EXTERNAL_STORAGE)
 				== PackageManager.PERMISSION_GRANTED) {
 
-			requirePermission();
+			requirePermission(this, this);
 			Intent intent = new Intent(this, FileChooser.class);
 			this.startActivityForResult(intent, 100);
 
 		} else {
 			Toast.makeText(this, "External storage permission required !", Toast.LENGTH_LONG).show();
-			requirePermission();
+			requirePermission(this, this);
 		}
 	}
 
@@ -173,13 +175,14 @@ public class FileSelect extends AppCompatActivity {
 			dialog.setTitle("Select a File");
 			dialog.setDialogSelectionListener(files -> {
 				//files is the array of the paths of files selected by the Application User.
-				save(files[0]);
+				if (files != null && files.length > 0)
+					save(files[0]);
 			});
 			dialog.show();
 
 		} else {
 			Toast.makeText(this, "External storage permission required !", Toast.LENGTH_LONG).show();
-			requirePermission();
+			requirePermission(this, this);
 		}
 	}
 
@@ -201,11 +204,14 @@ public class FileSelect extends AppCompatActivity {
 				Manifest.permission.WRITE_EXTERNAL_STORAGE)
 				== PackageManager.PERMISSION_GRANTED) {
 
-			Intent intent = new Intent(this, ExampleSelector.class);
-			this.startActivityForResult(intent, 100);
+			ArrayList<Example> exampleList = Example.createExamples(this);
+			if (exampleList != null) {
+				Intent intent = new Intent(this, ExampleSelector.class);
+				this.startActivityForResult(intent, 100);
+			}
 		} else {
 			Toast.makeText(this, "External storage permission required !", Toast.LENGTH_LONG).show();
-			requirePermission();
+			requirePermission(this, this);
 		}
 	}
 
