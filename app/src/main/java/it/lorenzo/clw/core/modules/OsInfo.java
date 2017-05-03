@@ -3,6 +3,7 @@ package it.lorenzo.clw.core.modules;
 import android.content.Context;
 import android.os.Build;
 
+import it.lorenzo.clw.core.Core;
 import it.lorenzo.clw.core.modules.Utility.BitmapWithPosition;
 import it.lorenzo.clw.core.modules.Utility.CommonUtility;
 
@@ -11,17 +12,18 @@ import it.lorenzo.clw.core.modules.Utility.CommonUtility;
  */
 public class OsInfo extends AbstractModule {
 
-	public final static String KERNEL = "kernel";
-	public final static String ROM = "rom";
-	public final static String ANDROID_VERSION = "android";
-	public final static String MODEL = "model";
-	public final static String PRODUCT = "product";
-	public final static String DEVICE = "device";
-	public final static String MANUFACTURER = "manufacturer";
-	public final static String DATE = "date";
-	public final static String EXEC = "exec";
+	private final static String KERNEL = "kernel";
+	private final static String ROM = "rom";
+	private final static String ANDROID_VERSION = "android";
+	private final static String MODEL = "model";
+	private final static String PRODUCT = "product";
+	private final static String DEVICE = "device";
+	private final static String MANUFACTURER = "manufacturer";
+	private final static String DATE = "date";
+	private final static String EXEC = "exec";
 
-	public OsInfo() {
+	public OsInfo(Core core) {
+		super(core);
 		keys.put(KERNEL, Result.string);
 		keys.put(ROM, Result.string);
 		keys.put(ANDROID_VERSION, Result.string);
@@ -35,11 +37,11 @@ public class OsInfo extends AbstractModule {
 
 	@Override
 	public void initialize(Context context) {
-
 	}
 
 	@Override
 	public String getString(String key, String[] params, Context context) {
+		initializeIfNeeded(context);
 		switch (key) {
 			case KERNEL:
 				return System.getProperty("os.version");

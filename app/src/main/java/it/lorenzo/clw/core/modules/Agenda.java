@@ -14,6 +14,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 
+import it.lorenzo.clw.core.Core;
 import it.lorenzo.clw.core.modules.Utility.BitmapWithPosition;
 
 /**
@@ -21,7 +22,7 @@ import it.lorenzo.clw.core.modules.Utility.BitmapWithPosition;
  */
 public class Agenda extends AbstractModule {
 
-	public static final String[] EVENTS = new String[]{
+	private static final String[] EVENTS = new String[]{
 			Calendars._ID,                            // 0
 			CalendarContract.Instances.TITLE,           // 1
 			CalendarContract.Instances.DESCRIPTION,         // 2
@@ -30,36 +31,37 @@ public class Agenda extends AbstractModule {
 			CalendarContract.Instances.ALL_DAY    //5
 	};
 
-	public static final String FUTURE = "future";
-	public static final String AGENDA = "agenda";
+	private static final String FUTURE = "future";
+	private static final String AGENDA = "agenda";
 
-	public static final String TITLE = "title";
+	private static final String TITLE = "title";
 
-	public static final String STARTNUM = "dt_start_num";
-	public static final String STARTDAYSHORT = "dt_start_day_short";
-	public static final String STARTDAYLONG = "dt_start_day_long";
-	public static final String STARTMOUNT = "dt_start_mounth";
-	public static final String STARTHH = "dt_start_hh";
-	public static final String STARTMM = "dt_start_mm";
-	public static final String STARTCUSTOM = "dt_start_custom";
-	public static final String STARTHM = "dt_start_hm";
+	private static final String STARTNUM = "dt_start_num";
+	private static final String STARTDAYSHORT = "dt_start_day_short";
+	private static final String STARTDAYLONG = "dt_start_day_long";
+	private static final String STARTMOUNT = "dt_start_mounth";
+	private static final String STARTHH = "dt_start_hh";
+	private static final String STARTMM = "dt_start_mm";
+	private static final String STARTCUSTOM = "dt_start_custom";
+	private static final String STARTHM = "dt_start_hm";
 
-	public static final String ENDNUM = "dt_end_num";
-	public static final String ENDDAYSHORT = "dt_end_day_short";
-	public static final String ENDDAYLONG = "dt_end_day_long";
-	public static final String ENDMOUNT = "dt_end_mounth";
-	public static final String ENDHH = "dt_end_hh";
-	public static final String ENDMM = "dt_end_mm";
-	public static final String ENDHM = "dt_end_hm";
-	public static final String ENDCUSTOM = "dt_end_custom";
+	private static final String ENDNUM = "dt_end_num";
+	private static final String ENDDAYSHORT = "dt_end_day_short";
+	private static final String ENDDAYLONG = "dt_end_day_long";
+	private static final String ENDMOUNT = "dt_end_mounth";
+	private static final String ENDHH = "dt_end_hh";
+	private static final String ENDMM = "dt_end_mm";
+	private static final String ENDHM = "dt_end_hm";
+	private static final String ENDCUSTOM = "dt_end_custom";
 
-	public static final String CALENDARSIDS = "calendars_ids";
+	private static final String CALENDARSIDS = "calendars_ids";
 
 	private int future = 28;
 	private String calendarQuery;
 	private Cursor cursor;
 
-	public Agenda() {
+	public Agenda(Core core) {
+		super(core);
 		calendarQuery = "";
 		keys.put(AGENDA, Result.string);
 		keys.put(FUTURE, Result.settings);
@@ -68,6 +70,7 @@ public class Agenda extends AbstractModule {
 
 	@Override
 	public String getString(String key, String[] params, Context context) {
+		initializeIfNeeded(context);
 		if (key.equals(AGENDA)) {
 			if (cursor == null) {
 				readCalendarEvent(context);

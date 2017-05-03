@@ -1,7 +1,5 @@
 package it.lorenzo.clw.core.modules.Utility;
 
-import android.util.Log;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -22,7 +20,6 @@ public class CommonUtility {
 	public static int readSystemFileAsInt(final String pSystemFile) {
 		InputStream in;
 		Scanner sc = null;
-		Log.i("sysFile",pSystemFile);
 		Process process;
 		try {
 			process = new ProcessBuilder(new String[]{cat, pSystemFile})
@@ -34,8 +31,7 @@ public class CommonUtility {
 				sb.append(sc.nextLine());
 			}
 			return Integer.parseInt(sb.toString());
-		} catch (IOException e) {
-			e.printStackTrace();
+		} catch (Exception e) {
 		} finally {
 			if (sc != null)
 				sc.close();
@@ -107,11 +103,11 @@ public class CommonUtility {
 				line = reader.readLine();
 			}
 			reader.close();
-
 			return stringArray;
-		} catch (IOException | InterruptedException e) {
-			throw new RuntimeException(e);
+		} catch (Exception e) {
+			//throw e;
 		}
+		return null;
 	}
 
 }

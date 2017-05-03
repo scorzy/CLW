@@ -14,7 +14,6 @@ import android.util.Pair;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -33,17 +32,16 @@ import it.lorenzo.clw.core.modules.Utility.BitmapWithPosition;
 
 public class Core {
 
-	final public static String WIDTH = "width";
-	final public static String HEIGHT = "height";
-	final public static String ALIGNC = "alignc";
-	final public static String ALIGNR = "alignr";
-	final public static String HLINE = "hline";
-	final public static String BGCOLOR = "bgColor";
-	final public static String XOFFLEFT = "xOffsetRight";
-	final public static String XOFFRIGHT = "xOffsetLeft";
-	final public static String VSPACE = "vSpace";
+	final private static String WIDTH = "width";
+	final private static String HEIGHT = "height";
+	final private static String ALIGNC = "alignc";
+	final private static String ALIGNR = "alignr";
+	final private static String HLINE = "hline";
+	final private static String BGCOLOR = "bgColor";
+	final private static String XOFFLEFT = "xOffsetRight";
+	final private static String XOFFRIGHT = "xOffsetLeft";
+	final private static String VSPACE = "vSpace";
 
-	private static Core instance = null;
 	private int maxWidth;
 	private int maxHeight;
 	private ArrayList<String> lines;
@@ -69,29 +67,22 @@ public class Core {
 	private int vSpaceRestore = 0;
 	private BarDrawer barDrawer;
 
-	private Core() {
+	public Core() {
 		txtMan = new TextManager();
-		barDrawer = new BarDrawer();
+		barDrawer = new BarDrawer(this);
 		modules = new ArrayList<>();
 		modules.add(txtMan);
 		modules.add(barDrawer);
 		modules.add(new SystemInfo(this));
-		modules.add(new OsInfo());
-		modules.add(new TopCpu());
-		modules.add(new TopMem());
-		modules.add(new Agenda());
-		modules.add(new Image());
-		modules.add(new Cpu());
+		modules.add(new OsInfo(this));
+		modules.add(new TopCpu(this));
+		modules.add(new TopMem(this));
+		modules.add(new Agenda(this));
+		modules.add(new Image(this));
+		modules.add(new Cpu(this));
 
 		drawCenter = new ArrayList<>();
 		drawRight = new ArrayList<>();
-	}
-
-	public static Core getInstance() {
-		if (instance == null) {
-			instance = new Core();
-		}
-		return instance;
 	}
 
 	public TextManager getTxtMan() {
@@ -102,20 +93,25 @@ public class Core {
 		return barDrawer;
 	}
 
-	public Bitmap getImageToSet(Context context, String path)
+	public Bitmap getImageToSet(final Context context, String path)
 			throws Exception {
 
 		maxWidth = 0;
 		maxHeight = 0;
 
-		for (Module module : modules)
-			module.initialize(context);
+		txtMan.initialize(context);
+
+//		modules.forEach(module -> {
+//			module.initialize(context);
+//		});
 
 		readConfigFile(path, context);
 
-		if (maxWidth == 0 || maxHeight == 0) {
-			throw (new Exception("Must specify width and height"));
-		}
+		if (maxWidth == 0 || maxHeight == 0)
+			throw new Exception("Must specify width and height");
+
+		if (lines.isEmpty())
+			throw new Exception("File has no TEXT");
 
 		Bitmap bmp = Bitmap.createBitmap(maxWidth, maxHeight, Bitmap.Config.ARGB_8888);
 		c = new Canvas(bmp);
@@ -132,14 +128,12 @@ public class Core {
 				xOffsetLeft = xOffsetLeftRestore;
 				xOffsetRight = xOffsetRightRestore;
 				y = newy;
-
-				for (Module module : modules)
-					module.finalize(context);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			//e.printStackTrace();
+		} finally {
+			modules.forEach(module -> module.finalizeIfNeeded(context));
 		}
-
 		return bmp;
 	}
 
@@ -325,8 +319,12 @@ public class Core {
 		return height;
 	}
 
-	private void readConfigFile(String path, Context context) throws IOException {
+	private void readConfigFile(String path, Context context) throws Exception {
 		File file = new File(path);
+
+		if (!file.exists() || !file.canRead())
+			throw new Exception("Cannot read file:" + path);
+
 		BufferedReader br = new BufferedReader(new InputStreamReader(
 				new FileInputStream(file)));
 		String line;
@@ -336,11 +334,11 @@ public class Core {
 		xOffsetRight = 0;
 		vSpace = 0;
 		vSpaceRestore = 0;
-		while (((line = br.readLine()) != null) && (!line.equals("TEXT"))) {
+		while (((line = br.readLine()) != null) && (!line.trim().equals("TEXT"))) {
 			line = line.trim();
 			if (!line.startsWith("#") && !line.isEmpty()) {
 				elements = line.split(" ");
-				if (!loadConfig(elements))
+				if (!loadConfig(elements) && elements.length > 0)
 					for (Module module : modules) {
 						if (module.check(elements[0]).equals(Module.Result.settings)) {
 							module.setDefaults(elements[0], Arrays.copyOfRange(elements, 1, elements.length), context);
@@ -357,7 +355,12 @@ public class Core {
 		br.close();
 	}
 
+	@org.jetbrains.annotations.Contract("null -> false")
 	private boolean loadConfig(String[] element) {
+
+		if (element == null || element.length < 2)
+			return false;
+
 		switch (element[0]) {
 			case WIDTH:
 				maxWidth = Integer.parseInt(element[1]);

@@ -2,14 +2,17 @@ package it.lorenzo.clw.core.modules;
 
 import android.content.Context;
 
+import it.lorenzo.clw.core.Core;
+
 /**
  * Created by lorenzo on 25/02/15.
  */
 public class TopCpu extends AbstractTop {
 
-	public static final String TOP = "top";
+	private static final String TOP = "top";
 
-	public TopCpu() {
+	public TopCpu(Core core) {
+		super(core);
 		order = "-s cpu";
 		keys.put(TOP, Result.string);
 	}

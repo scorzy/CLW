@@ -17,17 +17,17 @@ import it.lorenzo.clw.core.modules.Utility.BitmapWithPosition;
 
 public class TextManager implements Module {
 
-	public static final String FONT_SIZE = "fontSize";
-	public static final String FONT_OUTLINE_SIZE = "fontOutSize";
-	public static final String FONT_COLOR = "fontColor";
-	public static final String FONT_OUTLINE_COLOR = "fontOutColor";
-	public static final String FONT_SHADOW_COLOR = "fontShadowColor";
-	public static final String FONT_SHADOW_BLUR = "fontShadowBlur";
-	public static final String FONT_SHADOW_X = "fontShadowX";
-	public static final String FONT_SHADOW_Y = "fontShadowY";
-	public static final String FONT = "font";
-	public static final String COLORX = "color";
-	public static final String LINEWIDTH = "lineWidth";
+	private static final String FONT_SIZE = "fontSize";
+	private static final String FONT_OUTLINE_SIZE = "fontOutSize";
+	private static final String FONT_COLOR = "fontColor";
+	private static final String FONT_OUTLINE_COLOR = "fontOutColor";
+	private static final String FONT_SHADOW_COLOR = "fontShadowColor";
+	private static final String FONT_SHADOW_BLUR = "fontShadowBlur";
+	private static final String FONT_SHADOW_X = "fontShadowX";
+	private static final String FONT_SHADOW_Y = "fontShadowY";
+	private static final String FONT = "font";
+	private static final String COLORX = "color";
+	private static final String LINEWIDTH = "lineWidth";
 
 	private int textColor;
 	private int strokeColor;
@@ -337,7 +337,9 @@ public class TextManager implements Module {
 
 	@Override
 	public void finalize(Context context) {
-
 	}
 
+	@Override
+	public void finalizeIfNeeded(Context context) {
+	}
 }

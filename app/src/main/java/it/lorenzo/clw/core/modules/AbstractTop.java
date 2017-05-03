@@ -9,6 +9,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import it.lorenzo.clw.core.Core;
 import it.lorenzo.clw.core.modules.Utility.BitmapWithPosition;
 import it.lorenzo.clw.core.modules.Utility.CommonUtility;
 
@@ -17,13 +18,14 @@ import it.lorenzo.clw.core.modules.Utility.CommonUtility;
  */
 public abstract class AbstractTop extends AbstractModule {
 
-	public final String TOPTIME = "topTime";
+	private final String TOPTIME = "topTime";
 	protected LinkedList<Process> processList;
 	protected String cmd = "top -m 10 -n 1 -d ";
 	protected String order;
 	private int topTime;
 
-	public AbstractTop() {
+	public AbstractTop(Core core) {
+		super(core);
 		keys.put(TOPTIME, Result.settings);
 		topTime = 0;
 	}
@@ -52,10 +54,13 @@ public abstract class AbstractTop extends AbstractModule {
 
 	protected void getProcess(Context context) {
 		ArrayList<String> strings = CommonUtility.executeCommandToArray(cmd + topTime + " " + order);
+		if (strings == null || strings.isEmpty())
+			return;
 		Iterator<String> it = strings.iterator();
 		processList = new LinkedList<>();
-		while (it.hasNext() && !it.next().trim().startsWith("PID"))
+		while (it.hasNext() && !it.next().trim().startsWith("PID")) {
 			it.next();
+		}
 		while (it.hasNext()) {
 			String line = it.next();
 			if (line != null) {
@@ -66,7 +71,10 @@ public abstract class AbstractTop extends AbstractModule {
 
 	@Override
 	public String getString(String key, String[] params, Context context) {
-		if (params != null && params[0] != null && params[1] != null) switch (params[0]) {
+		initializeIfNeeded(context);
+		if (processList != null && !processList.isEmpty() &&
+				params != null && params[0] != null && params[1] != null)
+			switch (params[0]) {
 			case "name":
 				return processList.get(Integer.parseInt(params[1])).getName();
 			case "shortName":
@@ -88,8 +96,8 @@ public abstract class AbstractTop extends AbstractModule {
 				String mem = processList.get(Integer.parseInt(params[1])).getMem();
 				mem = mem.substring(0, mem.length() - 1);
 				return CommonUtility.convert(Long.parseLong(mem), 1);
-		}
-		return null;
+			}
+		return "";
 	}
 
 	@Override
@@ -113,7 +121,7 @@ public abstract class AbstractTop extends AbstractModule {
 		return null;
 	}
 
-	public class Process {
+	private class Process {
 		private String pid;
 		private String name;
 		private String cpu;
@@ -122,6 +130,9 @@ public abstract class AbstractTop extends AbstractModule {
 
 		public Process(String line, Context context) {
 			String[] stuff = line.split("\\s+");
+
+			if (stuff.length < 6)
+				return;
 
 			pid = stuff[0];
 			name = stuff[stuff.length - 1];

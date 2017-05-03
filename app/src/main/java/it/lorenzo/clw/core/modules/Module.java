@@ -16,9 +16,11 @@ public interface Module {
 
     void changeSetting(String key, String[] params, Context context);
 
-    BitmapWithPosition GetBmp(String key, String[] params, int maxWidth, Context context);
+	BitmapWithPosition GetBmp(String key, String[] params, int maxWidth, Context context);
 
     void initialize(Context context);
+
+	void finalizeIfNeeded(Context context);
 
 	void finalize(Context context);
 

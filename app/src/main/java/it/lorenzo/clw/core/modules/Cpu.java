@@ -29,7 +29,6 @@ public class Cpu extends AbstractModule {
 
 	private static final String CORE_NUMBER = "core_number";
 
-
 	private static String CPU_FREQ_1 = "/sys/devices/system/cpu/";
 	private static String CPU_FREQ_2 = "/cpufreq/scaling_cur_freq";
 	private static String CPU_MAX_REAL_FREQ = "/cpufreq/cpuinfo_max_freq";
@@ -39,7 +38,8 @@ public class Cpu extends AbstractModule {
 	private HashMap<String, Integer> cpuStats;
 	private ArrayList<Float> cpuUsage;
 
-	public Cpu() {
+	public Cpu(Core core) {
+		super(core);
 		cpuStats = new HashMap<>();
 		cpuUsage = new ArrayList<>();
 
@@ -65,6 +65,7 @@ public class Cpu extends AbstractModule {
 
 	@Override
 	public String getString(String key, String[] params, Context context) {
+		initializeIfNeeded(context);
 		switch (key) {
 			case FREQ:
 				return "" + getCpuStats(CPU_FREQ_1 + params[0] + CPU_FREQ_2) / 1000;
@@ -89,8 +90,9 @@ public class Cpu extends AbstractModule {
 
 	@Override
 	public BitmapWithPosition GetBmp(String key, String[] params, int maxWidth, Context context) {
+		initializeIfNeeded(context);
 		if (key.equals(CPU_BAR)) {
-			return Core.getInstance().getBarDrawer().getBar(
+			return core.getBarDrawer().getBar(
 					params.length > 2 && !TextUtils.isEmpty(params[2]) ? Integer.parseInt(params[2]) : 0,    //width
 					params.length > 1 && !TextUtils.isEmpty(params[1]) ? Integer.parseInt(params[1]) : 0,    //height
 					(int) getCpuUsage(params[0]),        // percent

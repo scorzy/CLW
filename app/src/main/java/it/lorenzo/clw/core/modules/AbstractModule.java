@@ -4,6 +4,7 @@ import android.content.Context;
 
 import java.util.HashMap;
 
+import it.lorenzo.clw.core.Core;
 import it.lorenzo.clw.core.modules.Utility.BitmapWithPosition;
 
 /**
@@ -12,9 +13,12 @@ import it.lorenzo.clw.core.modules.Utility.BitmapWithPosition;
 public abstract class AbstractModule implements Module {
 
 	protected HashMap<String, Result> keys;
+	protected Core core;
+	protected boolean initialized = false;
 
-	protected AbstractModule() {
+	protected AbstractModule(Core core) {
 		keys = new HashMap<>();
+		this.core = core;
 	}
 
 	@Override
@@ -26,7 +30,7 @@ public abstract class AbstractModule implements Module {
 	}
 
 	@Override
-	public BitmapWithPosition GetBmp(String key, String[] params, int maxWidth, Context context) {
+	public BitmapWithPosition GetBmp(String key, String[] params, int maxWidth, Context contex) {
 		return null;
 	}
 
@@ -41,15 +45,26 @@ public abstract class AbstractModule implements Module {
 
 	@Override
 	public void changeSetting(String key, String[] params, Context context) {
-
 	}
 
 	@Override
 	public void initialize(Context context) {
-
 	}
 
 	@Override
 	public void finalize(Context context) {
 	}
+
+	final public void initializeIfNeeded(Context context) {
+		if (!initialized)
+			this.initialize(context);
+		initialized = true;
+	}
+
+	final public void finalizeIfNeeded(Context context) {
+		if (initialized)
+			this.finalize(context);
+	}
+
+
 }

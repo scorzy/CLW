@@ -145,8 +145,8 @@ public class MyWidgetProvider extends AppWidgetProvider {
 					remoteViews = new RemoteViews(
 							context.getPackageName(), R.layout.widgetlayout);
 
-					remoteViews.setImageViewBitmap(R.id.widget_image, Core
-							.getInstance().getImageToSet(context, path));
+					remoteViews.setImageViewBitmap(R.id.widget_image,
+							new Core().getImageToSet(context, path));
 					Intent intent = new Intent();
 					intent.setAction("it.lorenzo.clw.intent.action.CHANGE_PICTURE");
 					int ids[] = new int[1];

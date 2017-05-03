@@ -58,10 +58,10 @@ public class SystemInfo extends AbstractModule {
 	private final static String SSID = "ssid";
 	private final static String WIFI_IP = "wifi_ip";
 
-	private Core core;
 	private long maxRam;
 
 	public SystemInfo(Core core) {
+		super(core);
 		keys.put(CPU_FREQ, Result.string);
 		keys.put(BATTERY_PERCENT, Result.string);
 		keys.put(BATTERY_CHARGING, Result.string);
@@ -79,14 +79,13 @@ public class SystemInfo extends AbstractModule {
 		keys.put(FS_BAR, Result.draw);
 		keys.put(SSID, Result.string);
 		keys.put(WIFI_IP, Result.string);
-		this.core = core;
 		maxRam = -1;
 	}
 
 	@Override
 	public String getString(String key, String[] params, Context context) {
+		initializeIfNeeded(context);
 		try {
-
 			switch (key) {
 				case CPU_FREQ:
 					if (params.length == 2)
@@ -134,11 +133,11 @@ public class SystemInfo extends AbstractModule {
 
 	@Override
 	public void initialize(Context context) {
-
 	}
 
 	@Override
 	public BitmapWithPosition GetBmp(String key, String[] params, int maxWidth, Context context) {
+		initializeIfNeeded(context);
 		try {
 			int start = 0;
 			if (key.equals(FS_BAR))
@@ -174,6 +173,8 @@ public class SystemInfo extends AbstractModule {
 	@Override
 	public void changeSetting(String key, String[] params, Context context) {
 	}
+
+	//	-----------------------------------------------------------------------
 
 	private int getBatteryLevel(Context context) {
 		Intent batteryIntent = context
@@ -224,7 +225,7 @@ public class SystemInfo extends AbstractModule {
 	}
 
 
-	// RAM ------------------------------------------------------------
+	// RAM --------------------------------------------------------------------
 
 	private int getMemPercent(Context context) {
 		return 100 - (int) (100 * getFreeeMemory(context) / getTotalMemory());
@@ -263,7 +264,7 @@ public class SystemInfo extends AbstractModule {
 	}
 
 
-	// STORAGE ------------------------------------------------------------
+	// STORAGE -----------------------------------------------------------------
 
 	private String getInternalStorage(Context context) {
 		File storage;
@@ -314,7 +315,7 @@ public class SystemInfo extends AbstractModule {
 		return 100 - (int) (100 * getFreeSpace(params, context) / getTotalSpace(params, context));
 	}
 
-	// WIFI ------------------------------------------------------------
+	// WIFI --------------------------------------------------------------------
 
 	private String getSsid(Context context) {
 		ConnectivityManager connManager = (ConnectivityManager) context

@@ -2,14 +2,17 @@ package it.lorenzo.clw.core.modules;
 
 import android.content.Context;
 
+import it.lorenzo.clw.core.Core;
+
 /**
  * Created by lorenzo on 26/02/15.
  */
 public class TopMem extends AbstractTop {
 
-	public static final String TOPMEM = "topMem";
+	private static final String TOPMEM = "topMem";
 
-	public TopMem() {
+	public TopMem(Core core) {
+		super(core);
 		order = "-s rss";
 		keys.put(TOPMEM, Result.string);
 	}

@@ -6,6 +6,7 @@ import android.graphics.Point;
 
 import java.util.StringTokenizer;
 
+import it.lorenzo.clw.core.Core;
 import it.lorenzo.clw.core.modules.Utility.BitmapWithPosition;
 
 
@@ -15,14 +16,16 @@ import it.lorenzo.clw.core.modules.Utility.BitmapWithPosition;
 
 public class Image extends AbstractModule {
 
-	public static final String IMAGE = "image";
+	private static final String IMAGE = "image";
 
-	public Image() {
+	public Image(Core core) {
+		super(core);
 		keys.put(IMAGE, Result.draw);
 	}
 
 	@Override
 	public BitmapWithPosition GetBmp(String key, String[] params, int maxWidth, Context context) {
+		initializeIfNeeded(context);
 		BitmapWithPosition bmp = new BitmapWithPosition();
 		bmp.setPoint(new Point(0, 0));
 		if (key.equals(IMAGE)) {

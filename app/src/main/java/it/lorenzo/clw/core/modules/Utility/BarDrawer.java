@@ -19,9 +19,9 @@ import static it.lorenzo.clw.core.modules.Utility.CommonUtility.executeCommand;
 
 public class BarDrawer extends AbstractModule {
 
-	public static final String EXECBAR = "execbar";
-	public static final String BAR_HEIGHT = "bar_height";
-	public static final String BAR_WIDTH = "bar_width";
+	private static final String EXECBAR = "execbar";
+	private static final String BAR_HEIGHT = "bar_height";
+	private static final String BAR_WIDTH = "bar_width";
 
 	private int width;
 	private int current_width;
@@ -29,18 +29,19 @@ public class BarDrawer extends AbstractModule {
 	private int height;
 	private int current_height;
 
-	public BarDrawer() {
+	public BarDrawer(Core core) {
+		super(core);
 		keys.put(EXECBAR, Result.draw);
 		keys.put(BAR_HEIGHT, Result.settings);
 		keys.put(BAR_WIDTH, Result.settings);
-	}
-
-	@Override
-	public void initialize(Context context) {
 		width = 0;
 		current_width = 0;
 		height = 0;
 		current_height = 0;
+	}
+
+	@Override
+	public void initialize(Context context) {
 	}
 
 	@Override
@@ -59,6 +60,7 @@ public class BarDrawer extends AbstractModule {
 
 	@Override
 	public void changeSetting(String key, String[] params, Context context) {
+		initializeIfNeeded(context);
 		switch (key) {
 			case BAR_HEIGHT:
 				if (params != null && params.length > 0)
@@ -77,8 +79,9 @@ public class BarDrawer extends AbstractModule {
 
 	@Override
 	public BitmapWithPosition GetBmp(String key, String[] params, int maxWidth, Context context) {
+		initializeIfNeeded(context);
 		if (key.equals(EXECBAR)) {
-			int percentage = 0;
+			int percentage;
 			try {
 				percentage = Integer.parseInt(params[0]);
 			} catch (Exception ex) {
@@ -91,7 +94,8 @@ public class BarDrawer extends AbstractModule {
 
 	public BitmapWithPosition getBar(int width, int height,
 									 int percent, int maxWidth) {
-		TextManager txtMan = Core.getInstance().getTxtMan();
+
+		TextManager txtMan = core.getTxtMan();
 		Paint fillPaint = txtMan.getFillPaint();
 		Paint.FontMetrics fontMetrics = fillPaint.getFontMetrics();
 		float descent = fontMetrics.descent;
