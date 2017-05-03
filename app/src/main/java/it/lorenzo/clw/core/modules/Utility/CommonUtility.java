@@ -96,16 +96,17 @@ public class CommonUtility {
 			BufferedReader reader = new BufferedReader(
 					new InputStreamReader(process.getInputStream()));
 			ArrayList<String> stringArray = new ArrayList<>();
-			process.waitFor();
+
 			String line = reader.readLine();
 			while (line != null) {
 				stringArray.add(line);
 				line = reader.readLine();
 			}
 			reader.close();
+			process.waitFor();
 			return stringArray;
 		} catch (Exception e) {
-			//throw e;
+			e.printStackTrace();
 		}
 		return null;
 	}

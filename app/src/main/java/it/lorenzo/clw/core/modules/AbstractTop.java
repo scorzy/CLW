@@ -56,10 +56,12 @@ public abstract class AbstractTop extends AbstractModule {
 		ArrayList<String> strings = CommonUtility.executeCommandToArray(cmd + topTime + " " + order);
 		if (strings == null || strings.isEmpty())
 			return;
+		//Log.i("getProcess", "initialize 2");
 		Iterator<String> it = strings.iterator();
 		processList = new LinkedList<>();
-		while (it.hasNext() && !it.next().trim().startsWith("PID")) {
-			it.next();
+		String line2 = "";
+		while (it.hasNext() && !line2.startsWith("PID")) {
+			line2 = it.next().trim();
 		}
 		while (it.hasNext()) {
 			String line = it.next();

@@ -101,10 +101,6 @@ public class Core {
 
 		txtMan.initialize(context);
 
-//		modules.forEach(module -> {
-//			module.initialize(context);
-//		});
-
 		readConfigFile(path, context);
 
 		if (maxWidth == 0 || maxHeight == 0)
@@ -130,9 +126,9 @@ public class Core {
 				y = newy;
 			}
 		} catch (Exception e) {
-			//e.printStackTrace();
 		} finally {
-			modules.forEach(module -> module.finalizeIfNeeded(context));
+			for (Module module : modules)
+				module.finalizeIfNeeded(context);
 		}
 		return bmp;
 	}

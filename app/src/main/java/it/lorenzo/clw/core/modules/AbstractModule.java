@@ -55,7 +55,7 @@ public abstract class AbstractModule implements Module {
 	public void finalize(Context context) {
 	}
 
-	final public void initializeIfNeeded(Context context) {
+	final protected void initializeIfNeeded(Context context) {
 		if (!initialized)
 			this.initialize(context);
 		initialized = true;
@@ -64,6 +64,7 @@ public abstract class AbstractModule implements Module {
 	final public void finalizeIfNeeded(Context context) {
 		if (initialized)
 			this.finalize(context);
+		initialized = false;
 	}
 
 
