@@ -83,8 +83,7 @@ public class SystemInfo extends AbstractModule {
 	}
 
 	@Override
-	public String getString(String key, String[] params, Context context) {
-		initializeIfNeeded(context);
+	public String genString(String key, String[] params, Context context) {
 		try {
 			switch (key) {
 				case CPU_FREQ:
@@ -136,8 +135,7 @@ public class SystemInfo extends AbstractModule {
 	}
 
 	@Override
-	public BitmapWithPosition GetBmp(String key, String[] params, int maxWidth, Context context) {
-		initializeIfNeeded(context);
+	public BitmapWithPosition genBmp(String key, String[] params, int maxWidth, Context context) {
 		try {
 			int start = 0;
 			if (key.equals(FS_BAR))
@@ -171,10 +169,18 @@ public class SystemInfo extends AbstractModule {
 	}
 
 	@Override
-	public void changeSetting(String key, String[] params, Context context) {
+	public void changeSetting2(String key, String[] params, Context context) {
 	}
 
-	//	-----------------------------------------------------------------------
+	@Override
+	public void setDefaults(String key, String[] params, Context context) {
+	}
+
+	@Override
+	protected void finalize(Context context) {
+	}
+
+//	-----------------------------------------------------------------------
 
 	private int getBatteryLevel(Context context) {
 		Intent batteryIntent = context
@@ -191,7 +197,7 @@ public class SystemInfo extends AbstractModule {
 	}
 
 	private boolean isConnected(Context context) {
-		Intent intent = context
+		Intent intent = context.getApplicationContext()
 				.registerReceiver(null,
 						new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
 		int plugged = intent.getIntExtra(BatteryManager.EXTRA_PLUGGED, -1);

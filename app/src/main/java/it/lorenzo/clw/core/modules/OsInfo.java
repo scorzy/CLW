@@ -40,8 +40,7 @@ public class OsInfo extends AbstractModule {
 	}
 
 	@Override
-	public String getString(String key, String[] params, Context context) {
-		initializeIfNeeded(context);
+	public String genString(String key, String[] params, Context context) {
 		switch (key) {
 			case KERNEL:
 				return System.getProperty("os.version");
@@ -71,12 +70,21 @@ public class OsInfo extends AbstractModule {
 
 
 	@Override
-	public void changeSetting(String key, String[] params, Context context) {
+	public void changeSetting2(String key, String[] params, Context context) {
 	}
 
 	@Override
-	public BitmapWithPosition GetBmp(String key, String[] params, int maxWidth, Context context) {
+	public BitmapWithPosition genBmp(String key, String[] params, int maxWidth, Context context) {
 		return null;
 	}
 
+	@Override
+	public void setDefaults(String key, String[] params, Context context) {
+
+	}
+
+	@Override
+	protected void finalize(Context context) {
+
+	}
 }

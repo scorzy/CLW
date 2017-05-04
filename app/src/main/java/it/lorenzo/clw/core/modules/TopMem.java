@@ -13,14 +13,14 @@ public class TopMem extends AbstractTop {
 
 	public TopMem(Core core) {
 		super(core);
-		order = "-s rss";
+		order = version == 2 ? "-s rss" : "-o RES";
 		keys.put(TOPMEM, Result.string);
 	}
 
 	@Override
-	public String getString(String key, String[] params, Context context) {
+	public String genString(String key, String[] params, Context context) {
 		if (key.equals(TOPMEM))
-			return super.getString(key, params, context);
+			return super.genString(key, params, context);
 		else return "";
 	}
 }

@@ -326,17 +326,13 @@ public class TextManager implements Module {
 
 
 	@Override
-	public BitmapWithPosition GetBmp(String key, String[] params, int maxWidth, Context context) {
+	public BitmapWithPosition getBmp(String key, String[] params, int maxWidth, Context context) {
 		return null;
 	}
 
 	public void drawLine(Canvas c, float currentX, float y) {
 		Paint fillPaint = getFillPaint();
 		c.drawLine(currentX, y, c.getWidth(), y, fillPaint);
-	}
-
-	@Override
-	public void finalize(Context context) {
 	}
 
 	@Override

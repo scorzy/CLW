@@ -3,7 +3,7 @@
 # https://github.com/scorzy/CLW/wiki
 
 width 440
-height 480
+height 380
 
 fontSize 19
 fontOutSize 4

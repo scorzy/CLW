@@ -29,33 +29,33 @@ public abstract class AbstractModule implements Module {
 		return res;
 	}
 
-	@Override
-	public BitmapWithPosition GetBmp(String key, String[] params, int maxWidth, Context contex) {
-		return null;
-	}
 
 	@Override
-	public String getString(String key, String[] params, Context context) {
-		return null;
+	final public BitmapWithPosition getBmp(String key, String[] params, int maxWidth, Context context) {
+		initializeIfNeeded(context);
+		return genBmp(key, params, maxWidth, context);
 	}
+
+	abstract protected BitmapWithPosition genBmp(String key, String[] params, int maxWidth, Context context);
 
 	@Override
-	public void setDefaults(String key, String[] params, Context context) {
+	final public String getString(String key, String[] params, Context context) {
+		initializeIfNeeded(context);
+		return genString(key, params, context);
 	}
+
+	abstract protected String genString(String key, String[] params, Context context);
 
 	@Override
-	public void changeSetting(String key, String[] params, Context context) {
+	final public void changeSetting(String key, String[] params, Context context) {
+		initializeIfNeeded(context);
+		changeSetting2(key, params, context);
 	}
 
-	@Override
-	public void initialize(Context context) {
-	}
+	abstract protected void changeSetting2(String key, String[] params, Context context);
 
-	@Override
-	public void finalize(Context context) {
-	}
 
-	final protected void initializeIfNeeded(Context context) {
+	private void initializeIfNeeded(Context context) {
 		if (!initialized)
 			this.initialize(context);
 		initialized = true;
@@ -67,5 +67,6 @@ public abstract class AbstractModule implements Module {
 		initialized = false;
 	}
 
+	abstract protected void finalize(Context context);
 
 }

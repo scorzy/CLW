@@ -58,14 +58,12 @@ public class Cpu extends AbstractModule {
 
 	@Override
 	public void initialize(Context context) {
-		super.initialize(context);
 		cpuStats.clear();
 		cpuUsage.clear();
 	}
 
 	@Override
-	public String getString(String key, String[] params, Context context) {
-		initializeIfNeeded(context);
+	public String genString(String key, String[] params, Context context) {
 		switch (key) {
 			case FREQ:
 				return "" + getCpuStats(CPU_FREQ_1 + params[0] + CPU_FREQ_2) / 1000;
@@ -89,8 +87,7 @@ public class Cpu extends AbstractModule {
 	}
 
 	@Override
-	public BitmapWithPosition GetBmp(String key, String[] params, int maxWidth, Context context) {
-		initializeIfNeeded(context);
+	public BitmapWithPosition genBmp(String key, String[] params, int maxWidth, Context context) {
 		if (key.equals(CPU_BAR)) {
 			return core.getBarDrawer().getBar(
 					params.length > 2 && !TextUtils.isEmpty(params[2]) ? Integer.parseInt(params[2]) : 0,    //width
@@ -184,5 +181,15 @@ public class Cpu extends AbstractModule {
 		}
 	}
 
+	@Override
+	public void setDefaults(String key, String[] params, Context context) {
+	}
 
+	@Override
+	protected void changeSetting2(String key, String[] params, Context context) {
+	}
+
+	@Override
+	protected void finalize(Context context) {
+	}
 }

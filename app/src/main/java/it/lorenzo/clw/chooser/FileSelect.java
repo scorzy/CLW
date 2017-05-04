@@ -21,6 +21,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.github.angads25.filepicker.controller.DialogSelectionListener;
 import com.github.angads25.filepicker.model.DialogConfigs;
 import com.github.angads25.filepicker.model.DialogProperties;
 import com.github.angads25.filepicker.view.FilePickerDialog;
@@ -173,11 +174,15 @@ public class FileSelect extends AppCompatActivity {
 			properties.extensions = null;
 			FilePickerDialog dialog = new FilePickerDialog(this, properties);
 			dialog.setTitle("Select a File");
-			dialog.setDialogSelectionListener(files -> {
-				//files is the array of the paths of files selected by the Application User.
-				if (files != null && files.length > 0)
-					save(files[0]);
-			});
+			dialog.setDialogSelectionListener(
+					new DialogSelectionListener() {
+						@Override
+						public void onSelectedFilePaths(String[] files) {
+							//files is the array of the paths of files selected by the Application User.
+							if (files != null && files.length > 0)
+								save(files[0]);
+						}
+					});
 			dialog.show();
 
 		} else {

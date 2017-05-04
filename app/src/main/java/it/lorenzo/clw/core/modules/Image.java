@@ -16,6 +16,7 @@ import it.lorenzo.clw.core.modules.Utility.BitmapWithPosition;
 
 public class Image extends AbstractModule {
 
+
 	private static final String IMAGE = "image";
 
 	public Image(Core core) {
@@ -24,8 +25,7 @@ public class Image extends AbstractModule {
 	}
 
 	@Override
-	public BitmapWithPosition GetBmp(String key, String[] params, int maxWidth, Context context) {
-		initializeIfNeeded(context);
+	public BitmapWithPosition genBmp(String key, String[] params, int maxWidth, Context context) {
 		BitmapWithPosition bmp = new BitmapWithPosition();
 		bmp.setPoint(new Point(0, 0));
 		if (key.equals(IMAGE)) {
@@ -62,16 +62,22 @@ public class Image extends AbstractModule {
 
 	@Override
 	public void initialize(Context context) {
-
 	}
 
 	@Override
-	public void changeSetting(String key, String[] params, Context context) {
-
+	public void changeSetting2(String key, String[] params, Context context) {
 	}
 
 	@Override
-	public String getString(String key, String[] params, Context context) {
+	public String genString(String key, String[] params, Context context) {
 		return null;
+	}
+
+	@Override
+	public void setDefaults(String key, String[] params, Context context) {
+	}
+
+	@Override
+	protected void finalize(Context context) {
 	}
 }

@@ -3,6 +3,7 @@ package it.lorenzo.clw.core.modules;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.text.TextUtils;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -22,12 +23,20 @@ public abstract class AbstractTop extends AbstractModule {
 	protected LinkedList<Process> processList;
 	protected String cmd = "top -m 10 -n 1 -d ";
 	protected String order;
+	protected int version;
 	private int topTime;
 
-	public AbstractTop(Core core) {
+	AbstractTop(Core core) {
 		super(core);
 		keys.put(TOPTIME, Result.settings);
 		topTime = 0;
+		//String vers = CommonUtility.executeCommand("top version");
+		//version = !TextUtils.isEmpty(vers) && vers.trim().toLowerCase().startsWith("procps-ng 2") ? 2 : 3;
+		version = 2;
+		if (version == 2)
+			cmd = "top -m 10 -n 1 -d ";
+		else
+			cmd = "top -b -n1 -d ";
 	}
 
 	private String getAppName(int pID, Context context) {
@@ -56,26 +65,41 @@ public abstract class AbstractTop extends AbstractModule {
 		ArrayList<String> strings = CommonUtility.executeCommandToArray(cmd + topTime + " " + order);
 		if (strings == null || strings.isEmpty())
 			return;
-		//Log.i("getProcess", "initialize 2");
 		Iterator<String> it = strings.iterator();
 		processList = new LinkedList<>();
 		String line2 = "";
 		while (it.hasNext() && !line2.startsWith("PID")) {
 			line2 = it.next().trim();
 		}
+		int[] headArray = null;
+		if (!TextUtils.isEmpty(line2)) {
+			String[] header = line2.split("\\s+");
+			headArray = new int[3];
+			for (int n = 0; n < header.length; n++) {
+				switch (header[n].trim().toUpperCase()) {
+					case "PID":
+						headArray[0] = n;
+						break;
+					case "CPU%":
+						headArray[1] = n;
+						break;
+					case "RSS":
+						headArray[2] = n;
+						break;
+				}
+			}
+		}
 		while (it.hasNext()) {
 			String line = it.next();
-			if (line != null) {
-				processList.addLast(new Process(line.trim(), context));
-			}
+			if (line != null)
+				processList.addLast(new Process(line.trim(), context, headArray));
 		}
 	}
 
 	@Override
-	public String getString(String key, String[] params, Context context) {
-		initializeIfNeeded(context);
+	protected String genString(String key, String[] params, Context context) {
 		if (processList != null && !processList.isEmpty() &&
-				params != null && params[0] != null && params[1] != null)
+				params != null && params[0] != null)
 			switch (params[0]) {
 			case "name":
 				return processList.get(Integer.parseInt(params[1])).getName();
@@ -103,14 +127,13 @@ public abstract class AbstractTop extends AbstractModule {
 	}
 
 	@Override
-	public void changeSetting(String key, String[] params, Context context) {
+	protected void changeSetting2(String key, String[] params, Context context) {
 	}
 
 	@Override
 	public void setDefaults(String key, String[] params, Context context) {
-		if (key.equals(TOPTIME)) {
+		if (key.equals(TOPTIME))
 			topTime = Integer.parseInt(params[0]);
-		}
 	}
 
 	@Override
@@ -119,8 +142,12 @@ public abstract class AbstractTop extends AbstractModule {
 	}
 
 	@Override
-	public BitmapWithPosition GetBmp(String key, String[] params, int maxWidth, Context context) {
+	protected BitmapWithPosition genBmp(String key, String[] params, int maxWidth, Context context) {
 		return null;
+	}
+
+	@Override
+	protected void finalize(Context context) {
 	}
 
 	private class Process {
@@ -130,16 +157,15 @@ public abstract class AbstractTop extends AbstractModule {
 		private String mem;
 		private String shortName;
 
-		public Process(String line, Context context) {
+		public Process(String line, Context context, int[] configuration) {
 			String[] stuff = line.split("\\s+");
-
-			if (stuff.length < 6)
+			if (configuration == null)
 				return;
 
-			pid = stuff[0];
+			pid = stuff[configuration[0]];
 			name = stuff[stuff.length - 1];
-			cpu = stuff[2];
-			mem = stuff[6];
+			cpu = stuff[configuration[1]];
+			mem = stuff[configuration[2]];
 			shortName = getAppName(Integer.parseInt(pid), context);
 		}
 

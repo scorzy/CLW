@@ -26,6 +26,7 @@ public class BarDrawer extends AbstractModule {
 	private int width;
 	private int current_width;
 
+
 	private int height;
 	private int current_height;
 
@@ -38,10 +39,6 @@ public class BarDrawer extends AbstractModule {
 		current_width = 0;
 		height = 0;
 		current_height = 0;
-	}
-
-	@Override
-	public void initialize(Context context) {
 	}
 
 	@Override
@@ -59,8 +56,7 @@ public class BarDrawer extends AbstractModule {
 	}
 
 	@Override
-	public void changeSetting(String key, String[] params, Context context) {
-		initializeIfNeeded(context);
+	public void changeSetting2(String key, String[] params, Context context) {
 		switch (key) {
 			case BAR_HEIGHT:
 				if (params != null && params.length > 0)
@@ -78,8 +74,7 @@ public class BarDrawer extends AbstractModule {
 	}
 
 	@Override
-	public BitmapWithPosition GetBmp(String key, String[] params, int maxWidth, Context context) {
-		initializeIfNeeded(context);
+	public BitmapWithPosition genBmp(String key, String[] params, int maxWidth, Context context) {
 		if (key.equals(EXECBAR)) {
 			int percentage;
 			try {
@@ -139,5 +134,18 @@ public class BarDrawer extends AbstractModule {
 		c.drawRect(x1, y1, x2, y2, fillPaint);
 
 		return new BitmapWithPosition(bmp);
+	}
+
+	@Override
+	public void finalize(Context context) {
+	}
+
+	@Override
+	public void initialize(Context context) {
+	}
+
+	@Override
+	protected String genString(String key, String[] params, Context context) {
+		return null;
 	}
 }

@@ -22,6 +22,7 @@ import it.lorenzo.clw.core.modules.Utility.BitmapWithPosition;
  */
 public class Agenda extends AbstractModule {
 
+
 	private static final String[] EVENTS = new String[]{
 			Calendars._ID,                            // 0
 			CalendarContract.Instances.TITLE,           // 1
@@ -69,12 +70,10 @@ public class Agenda extends AbstractModule {
 	}
 
 	@Override
-	public String getString(String key, String[] params, Context context) {
-		initializeIfNeeded(context);
+	protected String genString(String key, String[] params, Context context) {
 		if (key.equals(AGENDA)) {
-			if (cursor == null) {
-				readCalendarEvent(context);
-			}
+			if (cursor == null)
+				return "";
 			if (cursor.moveToPosition(Integer.parseInt(params[1]))) {
 				boolean allDay = cursor.getString(5).equals("1");
 				GregorianCalendar start = new GregorianCalendar();
@@ -145,11 +144,11 @@ public class Agenda extends AbstractModule {
 	}
 
 	@Override
-	public void changeSetting(String key, String[] params, Context context) {
+	protected void changeSetting2(String key, String[] params, Context context) {
 	}
 
 	@Override
-	public BitmapWithPosition GetBmp(String key, String[] params, int maxWidth, Context context) {
+	protected BitmapWithPosition genBmp(String key, String[] params, int maxWidth, Context context) {
 		return null;
 	}
 
@@ -192,8 +191,9 @@ public class Agenda extends AbstractModule {
 	}
 
 	@Override
-	protected void finalize() {
+	protected void finalize(Context context) {
 		if (cursor != null && !cursor.isClosed())
 			cursor.close();
 	}
+
 }

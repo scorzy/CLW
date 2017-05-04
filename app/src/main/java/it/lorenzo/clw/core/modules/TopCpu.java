@@ -13,14 +13,14 @@ public class TopCpu extends AbstractTop {
 
 	public TopCpu(Core core) {
 		super(core);
-		order = "-s cpu";
+		order = version == 2 ? "-s cpu" : "-o %CPU";
 		keys.put(TOP, Result.string);
 	}
 
 	@Override
-	public String getString(String key, String[] params, Context context) {
+	public String genString(String key, String[] params, Context context) {
 		if (key.equals(TOP))
-			return super.getString(key, params, context);
+			return super.genString(key, params, context);
 		else return "";
 	}
 

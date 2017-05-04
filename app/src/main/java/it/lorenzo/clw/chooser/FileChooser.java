@@ -6,6 +6,7 @@ package it.lorenzo.clw.chooser;
 
 import android.app.ListActivity;
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.MatrixCursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -34,13 +35,16 @@ public class FileChooser extends ListActivity {
 		int[] to = {R.id.fileName, R.id.fileName, R.id.imageView1};
 		mAdapter = new SimpleCursorAdapter(this, R.layout.line, null, from, to,
 				0);
-		mAdapter.setViewBinder((aView, aCursor, aColumnIndex) -> {
-			if (aColumnIndex == 1) {
-				String tag = aCursor.getString(aColumnIndex);
-				aView.setTag(tag);
-				return true;
+		mAdapter.setViewBinder(new SimpleCursorAdapter.ViewBinder() {
+			@Override
+			public boolean setViewValue(View aView, Cursor aCursor, int aColumnIndex) {
+				if (aColumnIndex == 1) {
+					String tag = aCursor.getString(aColumnIndex);
+					aView.setTag(tag);
+					return true;
+				}
+				return false;
 			}
-			return false;
 		});
 		setListAdapter(mAdapter);
 		setPath("/");

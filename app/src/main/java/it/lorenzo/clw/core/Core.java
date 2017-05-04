@@ -126,6 +126,7 @@ public class Core {
 				y = newy;
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
 		} finally {
 			for (Module module : modules)
 				module.finalizeIfNeeded(context);
@@ -232,7 +233,7 @@ public class Core {
 								// module draw
 							} else if (module.check(key) == Module.Result.draw) {
 								printText();
-								BitmapWithPosition bitmap = module.GetBmp(key, params, maxWidth - currentX, context);
+								BitmapWithPosition bitmap = module.getBmp(key, params, maxWidth - currentX, context);
 								if (!bitmap.getRelative()) {
 									c.drawBitmap(
 											bitmap.getBitmap(),
@@ -351,7 +352,7 @@ public class Core {
 		br.close();
 	}
 
-	@org.jetbrains.annotations.Contract("null -> false")
+	//@org.jetbrains.annotations.Contract("null -> false")
 	private boolean loadConfig(String[] element) {
 
 		if (element == null || element.length < 2)

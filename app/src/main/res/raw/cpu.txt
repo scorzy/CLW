@@ -1,5 +1,5 @@
 width 440
-height 300
+height 200
 
 fontSize 19
 fontOutSize 5
