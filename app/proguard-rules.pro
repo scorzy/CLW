@@ -18,4 +18,4 @@
 # android support library
 -keep class android.support.v7.widget.DefaultItemAnimator { *; }
 -dontobfuscate
--optimizations !code/simplification/arithmetic,!field/*,!class/merging/*,!code/allocation/variable
+#-optimizations !code/simplification/arithmetic,!field/*,!class/merging/*,!code/allocation/variable
